@@ -13,8 +13,6 @@ tags: []
 
 ## But first, panelsets with R code chunks
 
-{{< panelset class="greetings" >}}
-{{< panel name="Plot" >}}
 
 
 ```{r}
