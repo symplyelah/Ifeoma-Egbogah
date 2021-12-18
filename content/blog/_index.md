@@ -15,8 +15,8 @@ sidebar:
   description: |
     This blog is a collection of my personal data visualization and statistical analysis.
     
-    Check out the _index.md file in the /blog folder 
-    to edit this content. 
+   
+    
   author: "Ifeoma Egbogah"
   text_link_label: Subscribe via RSS
   text_link_url: /index.xml
