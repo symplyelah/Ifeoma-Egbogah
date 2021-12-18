@@ -15,7 +15,6 @@ sidebar:
   description: |
     This blog is a collection of my personal data visualization and statistical analysis.
     
-   
     
   author: "Ifeoma Egbogah"
   text_link_label: Subscribe via RSS
