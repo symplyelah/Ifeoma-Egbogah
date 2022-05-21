@@ -89,11 +89,10 @@ enableEmoji = true
       icon      = "twitter" # icon name without the 'fa-'
       icon_pack = "fab"
       url       = "https://twitter.com/negbogah"
- # [[params.social]]
-  #    icon      = "rss" # icon name without the 'fa-'
-   #   icon_pack = "fas"
-    #  url       = "/blog/index.xml"
-
+  [[params.social]]
+      icon      = "linkedin" # icon name without the 'fa-'
+      icon_pack = "fab"
+      url       = "https://www.linkedin.com/in/ifeoma-egbogah-a88527110/"
 [taxonomies]
   category = "categories"
   series = "series"
