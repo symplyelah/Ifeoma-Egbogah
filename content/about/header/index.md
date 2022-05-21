@@ -3,8 +3,12 @@
 text_align_right: false
 show_title_as_headline: false
 headline: |
-  Hi, my name is Emily Cooper. Nice to meet you.
+  Hi, my name is Ifeoma Egbogah. Nice to meet you.
 ---
 
 <!-- this is a subheadline -->
-I'm a driven 20-something American from Chicago who moved to Paris for an unexpected job opportunity. I've been tasked with bringing an American point of view to a venerable French marketing firm. :fr:
+I am an epidemiologist by training and an independent data visualization storyteller with skills in statistical analysis and data visualization. 
+
+I am always improving my skills in design  by contributing to challenges such as [TidyTuesday] (https://github.com/symplyelah/Tidytuesday) and self-led personal projects.
+
+My favorite tool for data analysis is [R] (https://www.r-project.org/about.html), an open source statistical computing and graphics software. For data visualization i use the package [{ggplot2}] (https://ggplot2.tidyverse.org/) from the [{tidyverse}] (https://www.tidyverse.org/) package and many more.
