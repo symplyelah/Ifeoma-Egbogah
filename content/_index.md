@@ -1,7 +1,7 @@
 ---
 title: "Ifeoma Oti Egbogah"
 subtitle: "Data Visualization & Analysis"
-description: "Love coding. Passionate about God. Beloved wife and proud mom."
+description: "Food exporter. Love coding. Passionate about God. Beloved wife and proud mom."
 date: 2022-5-21T12:27:33-06:00
 images:
   - img/ify.jpg
