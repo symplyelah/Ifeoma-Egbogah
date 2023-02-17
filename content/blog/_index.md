@@ -1,7 +1,7 @@
 ---
 title: Blog
 description: |
-  This blog is a collection of my personal data visualization and statistical analysis.
+  This blog is a collection of my data visualization, statistical analysis and personal thoughts.
 author: "Ifeoma Egbogah"
 show_post_thumbnail: true
 show_author_byline: true
@@ -13,7 +13,7 @@ layout: list-sidebar # list, list-sidebar, list-grid
 sidebar: 
   title: Blog
   description: |
-    This blog is a collection of my personal data visualization and statistical analysis.
+    This blog is a collection of my data visualization, statistical analysis and personal thoughts.
     
     
   author: "Ifeoma Egbogah"
