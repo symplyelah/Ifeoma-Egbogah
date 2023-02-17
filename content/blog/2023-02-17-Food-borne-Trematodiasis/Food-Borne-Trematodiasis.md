@@ -4,7 +4,7 @@ date: 2023-02-17
 author: "Ifeoma Egbogah"
 draft: false
 # layout options: single, single-sidebar
-layout: single
+layout: single-sidebar
 categories:
 - parasites
 ---
