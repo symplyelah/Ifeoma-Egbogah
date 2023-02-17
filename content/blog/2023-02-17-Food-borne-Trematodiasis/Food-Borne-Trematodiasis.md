@@ -9,6 +9,7 @@ categories:
 - parasites
 ---
 
+
 ## Trematodes or Flukes
 
 Trematodes or flukes are flatworms belonging to the Phylum Platyheminthes. They are small parasitic flatworms that use vertebrates as their definitive host and mollusk as their intermediate host.
@@ -66,7 +67,6 @@ Many factors contribute to these high prevalence rate and they include:
 5. Neglect by local and international health authorities.
 
 In their study, Fürst and colleagues highlighted several limitations of their study one of which was high quality data. As such the global burden of food-borne trematodiasis might be much higher than reported by Fürst and colleagues. Therefore as Fürst and colleagues said, *“the ultimate goal for future assessments of the burden of food-borne trematodiasis is to minimise the gap between actual and reported prevalence and between the complex natural histories of the diseases and the simplified models as applied in our calculations”*.
-
 
 
 Note:
