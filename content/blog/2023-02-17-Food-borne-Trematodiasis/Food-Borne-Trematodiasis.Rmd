@@ -1,6 +1,6 @@
 ---
 title: "Food Borne Trematodiasis"
-date: "2023-02-17"
+date: 2023-02-17
 author: "Ifeoma Egbogah"
 draft: false
 # layout options: single, single-sidebar
