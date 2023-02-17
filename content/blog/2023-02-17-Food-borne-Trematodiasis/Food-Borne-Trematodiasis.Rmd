@@ -1,0 +1,99 @@
+---
+title: "Food Borne Trematodiasis"
+date: "2023-02-17"
+author: "Ifeoma Egbogah"
+draft: false
+# layout options: single, single-sidebar
+layout: single
+categories:
+- parasites
+---
+
+
+## Trematodes or Flukes
+
+Trematodes or flukes are flatworms belonging to the Phylum Platyheminthes. They are small parasitic flatworms that use vertebrates as their definitive host and mollusk as their intermediate host.
+
+Trematode infections such as schistosomiasis have emerged as important tropical infections. An estimated 200 million people in the tropical belts of the world may have schistosomal infection. This makes schistosoma infection the second most prevalent tropical infectious disease in areas such as sub-Saharan Africa after malaria.
+
+Depending on the habitat in the infected host, flukes can be classified as blood flukes, liver flukes, lung flukes or intestinal flukes.
+ 
+__Blood flukes__ include *Schistosoma haematobium, Schistosoma mansoni, Schistosoma japonicum, Schistosoma mekongi, and Schistosoma intercalatum.*
+
+__Liver flukes__ include *Fasciola hepatica, Fasciola gigantica, C sinensis, Opisthorchis felineus, O viverrini, Dicrocoelium dendriticum, and Dicrocoelium hospes.*
+
+__Pancreatic flukes__ include *Eurytrema pacreaticum, Eurytrema coelomaticum, and Eurytrema ovis.*
+
+__Lung flukes__ include *Paragonimus westermani, Paragonimus mexicana, and Paragonimus skrjabini.*
+
+__Intestinal flukes__ include *F buski, M yokogawai, Echinostoma ilocanum, Watsonius watsoni, H heterophyes, and Gastrodiscoides hominis.*
+
+
+## Food-Borne Trematodiasis 
+
+Food-borne trematodiasis is a cluster/group of disease transmitted by the consumption of undercooked aquatic food contaminated with the larval stage of the fluke (i.e the metacercariae). The species of significant importance that affect human health are Clonorchiasis (infection with *Clonorchis sinensis*), Opisthorchiasis (infection with *Opisthorchis viverrini* or *O.felineus*) and Fasciolasis (infection with *Fasciola hepatica* or *F. gigantic*), which affect the liver and Paragonimiasis (infection with *Paragonimus spp*), which affect the lungs.
+
+
+## Life Cycle of Food-Borne Trematodes 
+
+Food-borne trematodes have a complex life cycle which entails definitive hosts (humans and animal species that act as reservoirs of infection), a first intermediate host (a freshwater snail) and a second intermediate host (a fish or a crustacean) in which the infective metacercariae develop. Fasciola spp. is however an exception as the metacercariae are found attached to water plants or float freely in fresh water.
+
+
+
+```{r package, echo=FALSE, include=FALSE}
+
+library(jpeg)
+library(here)
+library(tidyverse)
+library(ggimage)
+library(magick)
+library(blogdown)
+
+```
+
+
+{{< panelset class="greetings" >}}
+{{< panel name="Life Cycle" >}}
+
+```{r plot, echo=FALSE}
+
+life_cycle <- here("content", "blog", "2023-02-17-Food-borne-Trematodiasis", "life_cycle.jpg")
+
+pic <- image_read(life_cycle) %>%
+image_annotate("Life Cycle of Five Different Food-borne Trematodes", size = 12)
+
+pic
+
+```
+
+
+{{< /panel >}}
+{{< /panelset  >}}
+
+
+In The Lancet Infectious Disease, Thomas Fürst and colleagues conducted a systematic review and meta-analysis to determine the global burden of human food-borne trematodiasis. Fürst and colleagues used quantitative and qualitative data on prevalence, incidence, infection intensity, remission, mortality and duration to develop three simplified disease model and estimated the global burden of food-borne trematodiasis.
+
+From their investigation they estimated that in 2005, 56.2 million people were infected with food-borne trematodes, 7.9 million people had severe sequelae and 7158 people died, while the global burden of the disease was 665,352 DALYs, 351,026 years lived with disability and 314 326 years of life lost. They also reported more men than women were infected by *Clonorchis sinensis*, *Opisthorchis spp*, all intestinal flukes and *Paragonimus spp*, whereas more women than men were infected by *Fasciola spp*.
+ 
+These findings are quite interesting as they show food-borne trematode infections as an emerging neglected disease and occur in parts of the world where poverty persists, especially in East Asia, Southeast Asia and South America. However within a country, infection is usually focal and limited to specific regions or geographical areas. 
+
+Many factors contribute to these high prevalence rate and they include: 
+1. Lack of education, 
+2. Malnutrition, 
+3. Poor sanitation, 
+4. Inability to recognise asymptomatic infections
+5. Neglect by local and international health authorities.
+
+In their study, Fürst and colleagues highlighted several limitations of their study one of which was high quality data. As such the global burden of food-borne trematodiasis might be much higher than reported by Fürst and colleagues. Therefore as Fürst and colleagues said, *“the ultimate goal for future assessments of the burden of food-borne trematodiasis is to minimise the gap between actual and reported prevalence and between the complex natural histories of the diseases and the simplified models as applied in our calculations”*.
+
+
+
+Note:
+*Opisthorchis viverrini* and *Clonorchis sinensis* have been designated carcinogens by the __International Agency for Research Cancer__.
+
+Source:
+Thomas Fürst, Jennifer Keiser und Jürg Utzinger.
+__Global burden of human food-borne trematodiasis: a systematic review and meta-analysis.__ Lancet Infectious Diseases, Published online 21 November 2011, *doi:10.1016/S1473-3099(11)70294-8*.
+
+WHO: Initiative to estimate the Global Burden of Food-borne Diseases, 2011 http://www.who.int/foodsafety/foodborne_disease/ferg/en/index.html. (Accessed Sept 30, 2011)
+

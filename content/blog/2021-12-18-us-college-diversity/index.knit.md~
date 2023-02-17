@@ -93,61 +93,8 @@ pal2 <- wes_palette("Rushmore1", 5, type = "discrete") ##selecting colour palett
 The US college diversity data set contains the names of US Colleges in each state, the total enrollment as well as enrollment by diversity/ethnicity.
 
 
-```r
-diversity_school <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/diversity_school.csv')
-```
-
-```
-## Rows: 50655 Columns: 5
-```
-
-```
-## -- Column specification --------------------------------------------------------
-## Delimiter: ","
-## chr (3): name, state, category
-## dbl (2): total_enrollment, enrollment
-```
-
-```
-## 
-## i Use `spec()` to retrieve the full column specification for this data.
-## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
-```
-
-```r
-dplyr::glimpse(diversity_school)
-```
-
-```
-## Rows: 50,655
-## Columns: 5
-## $ name             <chr> "University of Phoenix-Arizona", "University of Phoen~
-## $ total_enrollment <dbl> 195059, 195059, 195059, 195059, 195059, 195059, 19505~
-## $ state            <chr> "Arizona", "Arizona", "Arizona", "Arizona", "Arizona"~
-## $ category         <chr> "Women", "American Indian / Alaska Native", "Asian", ~
-## $ enrollment       <dbl> 134722, 876, 1959, 31455, 13984, 1019, 58209, 19039, ~
-```
 
 
-##Map of the United States of America
-For the map of the US I used the urbnmapr package as it includes Alaska and Hawaii as inset.
-
-```r
-state <- get_urbn_map(map = "states", sf = TRUE)
-#state2 <- get_urbn_map(map = "counties", sf = TRUE)
-
-st_crs(state) <- st_crs(state)
-```
-
-```
-## old-style crs object detected; please recreate object with a recent sf::st_crs()
-## old-style crs object detected; please recreate object with a recent sf::st_crs()
-```
-
-## Coordinates of Each School
-As the dot need to placed at the precise location/estimated location the mutate_gecode from the ggmap package was used in extracting the longitude and latitude coordinates for each school. 
-
-Note: You would need a Google API key
 
 
 
