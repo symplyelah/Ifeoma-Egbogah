@@ -10,7 +10,6 @@ categories:
 ---
 
 
-{{< here >}}
 
 ## Premier League Managerial Ranking Pt 1
 
@@ -148,12 +147,14 @@ glimpse(epl)
 ```
 
 {{< /panel >}}
+{{< /panelset >}}
 
 ## Data Exploration
 ### Managers' Age on Debut
 
 Let's start by getting to know the data and see what information we can glean from it. This data covers from 1992 to 2018. I begin by calculating the ages of the managers and the mean age at which managers make a debut in the league. The youngest managers in the league were __Chris Coleman__ and __Attilio Lombardo__ while the oldest was __Dick Advocaat__, making a debut at ages __32__ and __67 years__ respectively. The mean age was __45 years__.
 
+{{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
 ```r
@@ -197,9 +198,11 @@ age_table
 ```
 
 {{< /panel >}}
+{{< /panelset >}}
 
 Lets get a better view of what the age distribution looks like by plotting a histogram. 
 
+{{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
 ```r
@@ -222,12 +225,14 @@ age
 <img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 {{< /panel >}}
+{{< /panelset >}}
 
 
 ### Managers' Nationality
 
 What is the most common nationality of premier league managers? 
 
+{{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
 ```r
@@ -254,10 +259,11 @@ nationality
 <img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-7-1.png" width="2400" />
 
 {{< /panel >}}
+{{< /panelset >}}
 
 Err... it looks a bit scattered let's arrange it in descending order based on there percentage so as to get a clearer picture.
 
-
+{{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
 ```r
@@ -286,6 +292,7 @@ national
 <img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-9-1.png" width="2400" />
 
 {{< /panel >}}
+{{< /panelset >}}
 
 
 That's much better. Here we can see that most managers in the league are __English__ with 51%, followed by the __Scots__ at 13%. __Uruguay, United States, Switzerland, Sweden, Israel, Denmark, Chile and Brazil__ have each had one manager from these countries debuting in the premier league.
@@ -293,6 +300,8 @@ That's much better. Here we can see that most managers in the league are __Engli
 ### Nationality of Managers Overseeing the Top Flight Clubs
 A popular opinion among sports pundits is that English managers haven't been given the chance to over see the top flight clubs in the league. How true is this? Let's find out.
 
+
+{{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
 
@@ -347,6 +356,7 @@ top_club
 <img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-12-1.png" width="672" />
 
 {{< /panel >}}
+{{< /panelset >}}
 
 The bar chart above shows that all the top 6 clubs except Manchester United and Arsenal have had an English Manager in charge. Manchester united not having an English manager since the creation of the league is partially because Sir Alex Ferguson (who debuted at the club in 1986) was the manager of the club before the league was created and he spent over 20 years at the helm of affairs in the club before handing over at the end of 2012/13 season.
 
@@ -355,6 +365,7 @@ The bar chart above shows that all the top 6 clubs except Manchester United and 
 
 David O'Leary and Martin O'Neill had no information on their English premier league debut. So I'll filter them out. Most managers lost on their first English premier league debut (42.5%).
 
+{{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
 ```r
@@ -383,9 +394,11 @@ debut
 <img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-14-1.png" width="2400" />
 
 {{< /panel >}}
+{{< /panelset >}}
 
 Out of the 112 English managers in the league 50 lost their debut matches. So far no Argentine, German, Portuguese or Spanish managers have lost their debut match.
 
+{{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
 ```r
