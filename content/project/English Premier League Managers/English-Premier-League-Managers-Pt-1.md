@@ -185,17 +185,16 @@ age_table <- epl%>%
 
 
 ```r
-age_table
+knitr::kable(age_table, col.names = c("Managers", "Age"))
 ```
 
-```
-## # A tibble: 3 x 2
-##   managers           age
-##   <chr>            <dbl>
-## 1 Attilio Lombardo    32
-## 2 Chris Coleman       32
-## 3 Dick Advocaat       67
-```
+
+
+|Managers         | Age|
+|:----------------|---:|
+|Attilio Lombardo |  32|
+|Chris Coleman    |  32|
+|Dick Advocaat    |  67|
 
 {{< /panel >}}
 {{< /panelset >}}
@@ -222,7 +221,7 @@ ggplot(aes(age)) +
 age
 ```
 
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 
 {{< /panel >}}
 {{< /panelset >}}
@@ -256,7 +255,7 @@ nationality <- epl %>%
 nationality
 ```
 
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-7-1.png" width="2400" />
+<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-6-1.png" width="2400" />
 
 {{< /panel >}}
 {{< /panelset >}}
@@ -289,7 +288,7 @@ national <- epl%>%
 national
 ```
 
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-9-1.png" width="2400" />
+<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-8-1.png" width="2400" />
 
 {{< /panel >}}
 {{< /panelset >}}
@@ -344,7 +343,7 @@ top_club <- epl%>%
 all_club
 ```
 
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-11-1.png" width="2400" />
+<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-10-1.png" width="2400" />
 
 {{< /panel >}}
 {{< panel name = "Top Six" >}}
@@ -353,7 +352,7 @@ all_club
 top_club
 ```
 
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 {{< /panel >}}
 {{< /panelset >}}
@@ -391,7 +390,7 @@ debut <- epl %>%
 debut
 ```
 
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-14-1.png" width="2400" />
+<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-13-1.png" width="2400" />
 
 {{< /panel >}}
 {{< /panelset >}}
@@ -425,7 +424,7 @@ debut_nat <- epl %>%
 debut_nat
 ```
 
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-16-1.png" width="2400" />
+<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-15-1.png" width="2400" />
 {{< /panel >}}
 {{< /panelset >}}
   

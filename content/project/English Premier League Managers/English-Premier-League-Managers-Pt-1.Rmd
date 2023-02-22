@@ -69,8 +69,8 @@ age_table <- epl%>%
 {{< /panel >}}
 {{< panel name = "Table" >}}
 
-```{r}
-age_table
+```{r table}
+knitr::kable(age_table, col.names = c("Managers", "Age"))
 ```
 
 {{< /panel >}}
@@ -92,7 +92,7 @@ ggplot(aes(age)) +
 ```
 
 {{< /panel >}}
-{{< panel name = "Age" >}}
+{{< panel name = "Distribution" >}}
 
 ```{r}
 age
