@@ -214,7 +214,7 @@ ggplot(aes(age)) +
 ```
 
 {{< /panel >}}
-{{< panel name = "Age" >}}
+{{< panel name = "Distribution" >}}
 
 
 ```r
