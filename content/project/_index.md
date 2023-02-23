@@ -10,11 +10,9 @@ layout: list-grid # list, list-sidebar, list-grid
 
 # for list-sidebar layout
 sidebar: 
-  title: A Sidebar for Your Projects
+  title: A Sidebar for My Projects
   description: |
-    Projects can be anything!
-    Check out the _index.md file in the /project folder 
-    to edit this content.
+    Projects can be anything!.
   author: "Ifeoma Egbogah"
   text_link_label: ""
   text_link_url: ""
