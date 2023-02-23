@@ -22,7 +22,7 @@ Let's start by loading in the data and packages into R. Data was gotten from the
 {{< panelset class = "greetings" >}}
 {{< panel name = "Packages" >}}
 
-```{r}
+```{r, echo= FALSE}
 
 library(tidyverse)
 library(lubridate)
@@ -50,7 +50,7 @@ Let's start by getting to know the data and see what information we can glean fr
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
-```{r}
+```{r, echo=FALSE}
 
 epl <- epl%>%
   mutate(age = year(as.period(interval((date_of_birth), (pl_debut)))))
@@ -69,7 +69,7 @@ age_table <- epl%>%
 {{< /panel >}}
 {{< panel name = "Table" >}}
 
-```{r table}
+```{r table, echo=FALSE}
 knitr::kable(age_table, col.names = c("Managers", "Age"))
 ```
 
@@ -80,21 +80,25 @@ Lets get a better view of what the age distribution looks like by plotting a his
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
-```{r, fig.width = 25, fig.height = 23.63}
+```{r, echo = FALSE}
 
 age <- epl%>%
 ggplot(aes(age)) + 
   geom_histogram(binwidth = 2, fill = scales::muted("darkorchid"), alpha = 0.8) +
   labs(x = "Age",
       y = "Count",
-      title = "Distribution of Managers' Age on Premier League Debut")
+      title = "Distribution of Managers' Age on Premier League Debut") +
+  theme(plot.title = element_text(hjust = 0.5, size = 50),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 25))
+
 
 ```
 
 {{< /panel >}}
 {{< panel name = "Distribution" >}}
 
-```{r}
+```{r, fig.width = 25, fig.height = 23.63, echo=FALSE}
 age
 ```
 
@@ -104,11 +108,11 @@ age
 
 ### Managers' Nationality
 
-What is the most common nationality of premier league managers? 
+One thing the English League is known for is the wide range in the nationality of not only the players but also the managers of the clubs. So, What is the most common nationality of premier league managers? Let's find out.
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
-```{r}
+```{r, echo=FALSE}
 
 nationality <- epl %>%
   count(nationality, sort=TRUE) %>%
@@ -119,14 +123,17 @@ nationality <- epl %>%
        y = "Count", 
        title = "Country of Origin of Premier League Managers") +
   scale_fill_scico_d(palette = "bam") +
-  theme(legend.position = "none") + 
+  theme(legend.position = "none",
+        plot.title = element_text(hjust = 0.5, size = 50),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 25)) + 
   coord_flip()
   
 ```
 {{< /panel >}}
 {{< panel name = "Nationality" >}}
 
-```{r, fig.width = 25, fig.height = 23.63}
+```{r, fig.width = 25, fig.height = 23.63, echo=FALSE}
 
 nationality
 
@@ -139,7 +146,7 @@ Err... it looks a bit scattered let's arrange it in descending order based on th
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
-```{r}
+```{r, echo=FALSE}
 
 national <- epl%>%
   count(nationality, sort=TRUE) %>%
@@ -152,14 +159,17 @@ national <- epl%>%
        title = "Country of Origin for Premier League Managers") +
   scale_fill_scico_d(palette = "bam") +
   scale_y_continuous(labels = label_percent()) +
-  theme(legend.position = "none") +
+  theme(legend.position = "none",
+        plot.title = element_text(hjust = 0.5, size = 50),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 25)) +
   coord_flip()
   
 ```
 {{< /panel >}}
 {{< panel name = "Origin" >}}
 
-```{r, fig.width = 25, fig.height = 23.63}
+```{r, fig.width = 25, fig.height = 23.63, echo=FALSE}
 national
 ```
 
@@ -176,7 +186,7 @@ A popular opinion among sports pundits is that English managers haven't been giv
 {{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
-```{r}
+```{r, echo= FALSE}
 
 all_club <- epl%>%
   count(nationality, clubs, sort = TRUE)%>%
@@ -190,7 +200,11 @@ all_club <- epl%>%
        title = "Nationality of the Premier League Managers for Each Clubs") +
   scale_fill_scico_d(palette = "bam") +
   scale_y_continuous(breaks = seq(2, 12, 2)) +
-  coord_flip() 
+  coord_flip() +
+  theme(plot.title = element_text(hjust = 0.5, size = 50),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 25))
+
 
 
 top_club <- epl%>%
@@ -206,20 +220,24 @@ top_club <- epl%>%
        title = "Nationality of the Premier League Managers for the Top Flight Clubs") +
   scale_fill_scico_d(palette = "bam") +
   scale_y_continuous(breaks = seq(2, 12, 2)) +
-  coord_flip() 
+  coord_flip() +
+  theme(plot.title = element_text(hjust = 0.5, size = 50),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 25))
+
   
 
 ```
 
 {{< /panel >}}
 {{< panel name = "All Clubs" >}}
-```{r, fig.width = 25, fig.height = 23.63}
+```{r, fig.width = 25, fig.height = 23.63, echo=FALSE}
 all_club
 ```
 
 {{< /panel >}}
 {{< panel name = "Top Six" >}}
-```{r}
+```{r, echo=FALSE}
 
 top_club
 
@@ -237,7 +255,7 @@ David O'Leary and Martin O'Neill had no information on their English premier lea
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
-```{r}
+```{r, echo=FALSE}
 
 debut <- epl %>%
   filter(debut_match != "na") %>%
@@ -250,15 +268,18 @@ debut <- epl %>%
        y = "Debut Match",
        title = "Percentage of Managers' Debut Match Win, Loss or Draw",
        subtitle = "They say the English League is very intense and quite competitive.\nFamous managers like Arsene Wenger, Josep Guardiola, Jose Mourinho won their Premier League debut match.\nSir Alex lost his debut macth while Jurgen Klopp drew his debut match.") +
-  theme(plot.title = element_text(hjust = 0.5),
-        plot.subtitle = element_text(face = "italic", colour = "darkorchid"))
+  theme(plot.title = element_text(hjust = 0.5, size = 50),
+        plot.subtitle = element_text(face = "italic", colour = "darkorchid"),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 25))
+
   
 
 ```
 {{< /panel >}}
 {{< panel name = "Debut" >}}
 
-```{r, fig.width = 25, fig.height = 23.63}
+```{r, fig.width = 25, fig.height = 23.63, echo=FALSE}
 debut
 ```
 
@@ -269,7 +290,7 @@ Out of the 112 English managers in the league 50 lost their debut matches. So fa
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
-```{r}
+```{r, echo=FALSE}
 
 debut_nat <- epl %>%
   filter(debut_match != "na") %>%
@@ -284,7 +305,11 @@ debut_nat <- epl %>%
   labs(x = "Nationality of Managers",
        y = "No of Matches",
        title = "Number of Matches Won, Drawn, or Lost by Managers on Debut Day",
-       fill = "Match Result")
+       fill = "Match Result") +
+  theme(plot.title = element_text(hjust = 0.5, size = 50),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 25))
+
 
 
   
@@ -292,7 +317,7 @@ debut_nat <- epl %>%
 {{< /panel >}}
 {{< panel name = "Match Result" >}}
 
-```{r, fig.width = 25, fig.height = 23.63}
+```{r, fig.width = 25, fig.height = 23.63, echo=FALSE}
 debut_nat
 ```
 {{< /panel >}}

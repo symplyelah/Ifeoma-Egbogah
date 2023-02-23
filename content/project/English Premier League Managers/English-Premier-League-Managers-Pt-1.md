@@ -23,10 +23,6 @@ Let's start by loading in the data and packages into R. Data was gotten from the
 {{< panel name = "Packages" >}}
 
 
-```r
-library(tidyverse)
-```
-
 ```
 ## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
 ```
@@ -44,10 +40,6 @@ library(tidyverse)
 ## x dplyr::lag()    masks stats::lag()
 ```
 
-```r
-library(lubridate)
-```
-
 ```
 ## 
 ## Attaching package: 'lubridate'
@@ -57,11 +49,6 @@ library(lubridate)
 ## The following objects are masked from 'package:base':
 ## 
 ##     date, intersect, setdiff, union
-```
-
-```r
-library(ggthemes)
-library(janitor)
 ```
 
 ```
@@ -75,16 +62,8 @@ library(janitor)
 ##     chisq.test, fisher.test
 ```
 
-```r
-library(here)
-```
-
 ```
 ## here() starts at C:/Users/Egbogah-2/Documents/Rworks/rsites/Ifeoma-Egbogah
-```
-
-```r
-library(scales)
 ```
 
 ```
@@ -104,18 +83,8 @@ library(scales)
 ##     col_factor
 ```
 
-```r
-library(scico)
-theme_set(theme_light())
-
-epl <- clean_names(read_csv(here("content", "project", "English Premier League Managers", "EPL.csv")))
-```
-
 ```
 ## Rows: 219 Columns: 11
-```
-
-```
 ## -- Column specification --------------------------------------------------------
 ## Delimiter: ","
 ## chr  (4): Managers, Clubs, Nationality, Debut_Match
@@ -124,10 +93,6 @@ epl <- clean_names(read_csv(here("content", "project", "English Premier League M
 ## 
 ## i Use `spec()` to retrieve the full column specification for this data.
 ## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
-```
-
-```r
-glimpse(epl)
 ```
 
 ```
@@ -157,16 +122,6 @@ Let's start by getting to know the data and see what information we can glean fr
 {{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
-```r
-epl <- epl%>%
-  mutate(age = year(as.period(interval((date_of_birth), (pl_debut)))))
-
-epl%>%
-  summarise(mean_age = mean(age),
-            youngest = min(age),
-            oldest = max(age))
-```
-
 ```
 ## # A tibble: 1 x 3
 ##   mean_age youngest oldest
@@ -174,20 +129,8 @@ epl%>%
 ## 1     45.9       32     67
 ```
 
-```r
-age_table <- epl%>%
-  select(managers, age)%>%
-  filter(age %in% c(32, 67))
-```
-
 {{< /panel >}}
 {{< panel name = "Table" >}}
-
-
-```r
-knitr::kable(age_table, col.names = c("Managers", "Age"))
-```
-
 
 
 |Managers         | Age|
@@ -204,24 +147,11 @@ Lets get a better view of what the age distribution looks like by plotting a his
 {{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
-```r
-age <- epl%>%
-ggplot(aes(age)) + 
-  geom_histogram(binwidth = 2, fill = scales::muted("darkorchid"), alpha = 0.8) +
-  labs(x = "Age",
-      y = "Count",
-      title = "Distribution of Managers' Age on Premier League Debut")
-```
 
 {{< /panel >}}
 {{< panel name = "Distribution" >}}
 
-
-```r
-age
-```
-
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-4-1.png" width="2400" />
 
 {{< /panel >}}
 {{< /panelset >}}
@@ -229,31 +159,13 @@ age
 
 ### Managers' Nationality
 
-What is the most common nationality of premier league managers? 
+One thing the English League is known for is the wide range in the nationality of not only the players but also the managers of the clubs. So, What is the most common nationality of premier league managers? Let's find out.
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
-```r
-nationality <- epl %>%
-  count(nationality, sort=TRUE) %>%
- # mutate(nationality = fct_reorder(nationality, n))%>%
-  ggplot(aes(nationality, n)) + 
-  geom_col(aes(fill = nationality)) + 
-  labs(x = "Country of Origin",
-       y = "Count", 
-       title = "Country of Origin of Premier League Managers") +
-  scale_fill_scico_d(palette = "bam") +
-  theme(legend.position = "none") + 
-  coord_flip()
-```
 {{< /panel >}}
 {{< panel name = "Nationality" >}}
-
-
-```r
-nationality
-```
 
 <img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-6-1.png" width="2400" />
 
@@ -265,28 +177,8 @@ Err... it looks a bit scattered let's arrange it in descending order based on th
 {{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
-```r
-national <- epl%>%
-  count(nationality, sort=TRUE) %>%
-  mutate(percent = (n/sum(n))) %>%
-  mutate(country = fct_reorder(nationality, percent))%>%
-  ggplot(aes(country, percent)) + 
-  geom_col(aes(fill = country)) + 
-  labs(x = "Country of Origin",
-       y = "Percentage",
-       title = "Country of Origin for Premier League Managers") +
-  scale_fill_scico_d(palette = "bam") +
-  scale_y_continuous(labels = label_percent()) +
-  theme(legend.position = "none") +
-  coord_flip()
-```
 {{< /panel >}}
 {{< panel name = "Origin" >}}
-
-
-```r
-national
-```
 
 <img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-8-1.png" width="2400" />
 
@@ -304,54 +196,13 @@ A popular opinion among sports pundits is that English managers haven't been giv
 {{< panel name = "Code" >}}
 
 
-```r
-all_club <- epl%>%
-  count(nationality, clubs, sort = TRUE)%>%
-  group_by(clubs)%>%
-  mutate(total = sum(n))%>%
-  ggplot(aes(fct_reorder(clubs, total), n)) + 
-  geom_col(aes(fill= nationality)) +
-  labs(x = "Country of Origin",
-       y = "Counts",
-       fill = "Nationality",
-       title = "Nationality of the Premier League Managers for Each Clubs") +
-  scale_fill_scico_d(palette = "bam") +
-  scale_y_continuous(breaks = seq(2, 12, 2)) +
-  coord_flip() 
-
-
-top_club <- epl%>%
-  filter(clubs %in% c("Arsenal", "Chelsea", "Manchester United", "Manchester City", "Liverpool", "Tottenham Hotspur"))%>%
-  count(nationality, clubs, sort = TRUE)%>%
-  group_by(clubs)%>%
-  mutate(total = sum(n))%>%
-  ggplot(aes(fct_reorder(clubs, total), n)) + 
-  geom_col(aes(fill= nationality)) +
-  labs(x = "Country of Origin",
-       y = "Counts",
-       fill = "Nationality",
-       title = "Nationality of the Premier League Managers for the Top Flight Clubs") +
-  scale_fill_scico_d(palette = "bam") +
-  scale_y_continuous(breaks = seq(2, 12, 2)) +
-  coord_flip() 
-```
 
 {{< /panel >}}
 {{< panel name = "All Clubs" >}}
-
-```r
-all_club
-```
-
 <img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-10-1.png" width="2400" />
 
 {{< /panel >}}
 {{< panel name = "Top Six" >}}
-
-```r
-top_club
-```
-
 <img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 {{< /panel >}}
@@ -367,28 +218,8 @@ David O'Leary and Martin O'Neill had no information on their English premier lea
 {{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
-```r
-debut <- epl %>%
-  filter(debut_match != "na") %>%
-  count(debut_match, sort=TRUE) %>%
-  mutate(percent = (n/sum(n)))%>%
-  ggplot(aes(percent, debut_match)) +
-  geom_col(fill = scales::muted("darkorchid"), alpha = 0.8) +
-  scale_x_continuous(labels = scales::label_percent())+
-  labs(x = "Percent (%)",
-       y = "Debut Match",
-       title = "Percentage of Managers' Debut Match Win, Loss or Draw",
-       subtitle = "They say the English League is very intense and quite competitive.\nFamous managers like Arsene Wenger, Josep Guardiola, Jose Mourinho won their Premier League debut match.\nSir Alex lost his debut macth while Jurgen Klopp drew his debut match.") +
-  theme(plot.title = element_text(hjust = 0.5),
-        plot.subtitle = element_text(face = "italic", colour = "darkorchid"))
-```
 {{< /panel >}}
 {{< panel name = "Debut" >}}
-
-
-```r
-debut
-```
 
 <img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-13-1.png" width="2400" />
 
@@ -400,29 +231,8 @@ Out of the 112 English managers in the league 50 lost their debut matches. So fa
 {{< panelset class = "greetings" >}}
 {{< panel name = "Code" >}}
 
-```r
-debut_nat <- epl %>%
-  filter(debut_match != "na") %>%
-  count(debut_match, nationality, sort=TRUE)%>%
-  group_by(nationality)%>%
-  mutate(total = sum(n))%>%
-  ggplot(aes(fct_reorder(nationality, total), n)) + 
-  geom_col(aes(fill = debut_match)) +
-  coord_flip() +
-  scale_fill_scico_d(palette = "bam", direction = -1) +
-  scale_y_continuous(breaks = seq(0, 130, 20)) +
-  labs(x = "Nationality of Managers",
-       y = "No of Matches",
-       title = "Number of Matches Won, Drawn, or Lost by Managers on Debut Day",
-       fill = "Match Result")
-```
 {{< /panel >}}
 {{< panel name = "Match Result" >}}
-
-
-```r
-debut_nat
-```
 
 <img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/unnamed-chunk-15-1.png" width="2400" />
 {{< /panel >}}
