@@ -21,9 +21,6 @@ Well time to find out, as I use bayesian inference to determine who is/was the b
 
 Let's start by loading in the data and packages into R. Data was gotten from the premier league website (www.premierleague.com). So far 219 managers have debuted in the league since its inception in 1992 to 2018.
 
-{{< panelset class = "greetings" >}}
-{{< panel name = "Packages" >}}
-
 ```{r, echo= FALSE, include=FALSE}
 
 library(tidyverse)
@@ -37,8 +34,18 @@ theme_set(theme_light())
 
 epl <- clean_names(read_csv(here("content", "project", "English Premier League Managers", "EPL.csv")))
 
-glimpse(epl)
 
+```
+
+{{< panelset class = "greetings" >}}
+{{< panel name = "Data" >}}
+
+```{r, echo= FALSE}
+
+data <- epl%>%
+  top_n(5)
+
+knitr::kable(data, col.names = str_to_title(str_replace_all(names(data), "_", " ")))
 
 ```
 
@@ -51,13 +58,13 @@ glimpse(epl)
 Let's start by getting to know the data and see what information we can glean from it. This data covers from 1992 to 2018. I begin by calculating the ages of the managers and the mean age at which managers make a debut in the league. The youngest managers in the league were __Chris Coleman__ and __Attilio Lombardo__ while the oldest was __Dick Advocaat__, making a debut at ages __32__ and __67 years__ respectively. The mean age was __45 years__.
 
 {{< panelset class = "greetings" >}}
-{{< panel name = "Code" >}}
-```{r, echo=FALSE}
+{{< panel name = "Table" >}}
+```{r Age, echo=FALSE}
 
 epl <- epl%>%
   mutate(age = year(as.period(interval((date_of_birth), (pl_debut)))))
 
-epl%>%
+summary_epl <- epl%>%
   summarise(mean_age = mean(age),
             youngest = min(age),
             oldest = max(age))
@@ -66,13 +73,14 @@ age_table <- epl%>%
   select(managers, age)%>%
   filter(age %in% c(32, 67))
 
+knitr::kable(age_table, col.names = c("Managers", "Age"))
+
 ```
 
 {{< /panel >}}
-{{< panel name = "Table" >}}
+{{< panel name = "Code" >}}
+```{r ref.label='Age', fig.show='hide'}
 
-```{r table, echo=FALSE}
-knitr::kable(age_table, col.names = c("Managers", "Age"))
 ```
 
 {{< /panel >}}
@@ -81,8 +89,8 @@ knitr::kable(age_table, col.names = c("Managers", "Age"))
 Lets get a better view of what the age distribution looks like by plotting a histogram. 
 
 {{< panelset class = "greetings" >}}
-{{< panel name = "Code" >}}
-```{r, echo = FALSE}
+{{< panel name = "Age Distribution" >}}
+```{r Age Distribution, echo = FALSE, fig.width = 25, fig.height = 23.63}
 
 age <- epl%>%
 ggplot(aes(age)) + 
@@ -94,16 +102,14 @@ ggplot(aes(age)) +
         axis.title = element_text(size = 30),
         axis.text = element_text(size = 25))
 
-
-```
-
-{{< /panel >}}
-{{< panel name = "Distribution" >}}
-
-```{r, fig.width = 25, fig.height = 23.63, echo=FALSE}
 age
 ```
 
+{{< /panel >}}
+{{< panel name = "Code" >}}
+```{r ref.label='Age Distribution', fig.show='hide'}
+
+```
 {{< /panel >}}
 {{< /panelset >}}
 
@@ -113,8 +119,8 @@ age
 One thing the English League is known for is the wide range in the nationality of not only the players but also the managers of the clubs. So, What is the most common nationality of premier league managers? Let's find out.
 
 {{< panelset class = "greetings" >}}
-{{< panel name = "Code" >}}
-```{r, echo=FALSE}
+{{< panel name = "Nationality" >}}
+```{r Nationality, fig.width = 25, fig.height = 23.63, echo=FALSE,}
 
 nationality <- epl %>%
   count(nationality, sort=TRUE) %>%
@@ -130,14 +136,14 @@ nationality <- epl %>%
         axis.title = element_text(size = 30),
         axis.text = element_text(size = 25)) + 
   coord_flip()
+
+nationality
   
 ```
 {{< /panel >}}
-{{< panel name = "Nationality" >}}
+{{< panel name = "Code" >}}
+```{r ref.label='Nationality', fig.show='hide'}
 
-```{r, fig.width = 25, fig.height = 23.63, echo=FALSE}
-
-nationality
 
 ```
 
@@ -147,10 +153,10 @@ nationality
 Err... it looks a bit scattered let's arrange it in descending order based on there percentage so as to get a clearer picture.
 
 {{< panelset class = "greetings" >}}
-{{< panel name = "Code" >}}
-```{r, echo=FALSE}
+{{< panel name = "Nationality Arranged" >}}
+```{r Origin, echo=FALSE, fig.width = 25, fig.height = 23.63}
 
-national <- epl%>%
+Origin <- epl%>%
   count(nationality, sort=TRUE) %>%
   mutate(percent = (n/sum(n))) %>%
   mutate(country = fct_reorder(nationality, percent))%>%
@@ -166,15 +172,16 @@ national <- epl%>%
         axis.title = element_text(size = 30),
         axis.text = element_text(size = 25)) +
   coord_flip()
-  
+
+
+Origin  
 ```
 {{< /panel >}}
-{{< panel name = "Origin" >}}
+{{< panel name = "Code" >}}
+```{r ref.label='Origin', fig.show='hide'}
 
-```{r, fig.width = 25, fig.height = 23.63, echo=FALSE}
-national
+
 ```
-
 {{< /panel >}}
 {{< /panelset >}}
 
@@ -186,9 +193,8 @@ A popular opinion among sports pundits is that English managers haven't been giv
 
 
 {{< panelset class = "greetings" >}}
-{{< panel name = "Code" >}}
-
-```{r, echo= FALSE}
+{{< panel name = "Club" >}}
+```{r Clubs, echo= FALSE, fig.width = 25, fig.height = 23.63}
 
 all_club <- epl%>%
   count(nationality, clubs, sort = TRUE)%>%
@@ -206,7 +212,7 @@ all_club <- epl%>%
   theme(plot.title = element_text(hjust = 0.5, size = 50),
         axis.title = element_text(size = 30),
         axis.text = element_text(size = 25),
-        legend.title = element_text(size = 35),
+        legend.title = element_text(size = 40),
         legend.key.size  = unit(3, "cm"),
         legend.text = element_text(size = 20))
 
@@ -226,31 +232,23 @@ top_club <- epl%>%
   scale_fill_scico_d(palette = "bam") +
   scale_y_continuous(breaks = seq(2, 12, 2)) +
   coord_flip() +
-  theme(plot.title = element_text(hjust = 0.5, size = 12),
-        axis.title = element_text(size = 10),
-        axis.text = element_text(size = 10),
-        legend.title = element_text(size = 15),
-        legend.key.size  = unit(0.5, "cm"),
-        legend.text = element_text(size = 10))
+  theme(plot.title = element_text(hjust = 0.5, size = 40),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 22),
+        legend.title = element_text(size = 35),
+        legend.key.size  = unit(2, "cm"),
+        legend.text = element_text(size = 25))
 
-  
-
-```
-
-{{< /panel >}}
-{{< panel name = "All Clubs" >}}
-```{r, fig.width = 25, fig.height = 23.63, echo=FALSE}
 all_club
-```
-
-{{< /panel >}}
-{{< panel name = "Top Six" >}}
-```{r, echo=FALSE}
-
 top_club
 
 ```
 
+{{< /panel >}}
+{{< panel name = "Code" >}}
+```{r ref.label='Clubs', fig.show='hide'}
+
+```
 {{< /panel >}}
 {{< /panelset >}}
 
@@ -262,8 +260,8 @@ The bar chart above shows that all the top 6 clubs except Manchester United and 
 David O'Leary and Martin O'Neill had no information on their English premier league debut. So I'll filter them out. Most managers lost on their first English premier league debut (42.5%).
 
 {{< panelset class = "greetings" >}}
-{{< panel name = "Code" >}}
-```{r, echo=FALSE}
+{{< panel name = "Match Result" >}}
+```{r Match Result, echo=FALSE, fig.width = 25, fig.height = 23.63}
 
 debut <- epl %>%
   filter(debut_match != "na") %>%
@@ -282,14 +280,13 @@ debut <- epl %>%
         axis.title = element_text(size = 30),
         axis.text = element_text(size = 25))
 
-  
+debut  
 
 ```
 {{< /panel >}}
-{{< panel name = "Debut" >}}
+{{< panel name = "Code" >}}
+```{r ref.label='Match Result', fig.show='hide'}
 
-```{r, fig.width = 25, fig.height = 23.63, echo=FALSE}
-debut
 ```
 
 {{< /panel >}}
@@ -298,8 +295,8 @@ debut
 Out of the 112 English managers in the league 50 lost their debut matches. So far no Argentine, German, Portuguese or Spanish managers have lost their debut match.
 
 {{< panelset class = "greetings" >}}
-{{< panel name = "Code" >}}
-```{r, echo=FALSE}
+{{< panel name = "Debut Result by Nationality" >}}
+```{r Debut Result, echo=FALSE, fig.width = 25, fig.height = 23.63}
 
 debut_nat <- epl %>%
   filter(debut_match != "na") %>%
@@ -318,16 +315,18 @@ debut_nat <- epl %>%
   theme(plot.title = element_text(hjust = 0.5, size = 50),
         axis.title = element_text(size = 30),
         axis.text = element_text(size = 25),
-        legend.title = element_text(size = 15),
+        legend.title = element_text(size = 35),
         legend.key.size  = unit(3, "cm"),
         legend.text = element_text(size = 20))
-  
+
+debut_nat  
 ```
 {{< /panel >}}
-{{< panel name = "Match Result" >}}
+{{< panel name = "Code" >}}
 
-```{r, fig.width = 25, fig.height = 23.63, echo=FALSE}
-debut_nat
+```{r ref.label='Debut Result', fig.show='hide'}
+
+
 ```
 {{< /panel >}}
 {{< /panelset >}}
