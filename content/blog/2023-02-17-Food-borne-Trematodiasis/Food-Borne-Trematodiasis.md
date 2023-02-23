@@ -6,7 +6,7 @@ draft: false
 # layout options: single, single-sidebar
 layout: single-sidebar
 categories:
-- parasites
+- parasites, blog
 ---
 
 

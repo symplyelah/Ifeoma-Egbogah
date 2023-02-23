@@ -7,6 +7,8 @@ draft: false
 layout: single-sidebar
 categories:
 - project, football
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -22,7 +24,7 @@ Let's start by loading in the data and packages into R. Data was gotten from the
 {{< panelset class = "greetings" >}}
 {{< panel name = "Packages" >}}
 
-```{r, echo= FALSE}
+```{r, echo= FALSE, include=FALSE}
 
 library(tidyverse)
 library(lubridate)
@@ -121,7 +123,7 @@ nationality <- epl %>%
   geom_col(aes(fill = nationality)) + 
   labs(x = "Country of Origin",
        y = "Count", 
-       title = "Country of Origin of Premier League Managers") +
+       title = "Nationality of Premier League Managers") +
   scale_fill_scico_d(palette = "bam") +
   theme(legend.position = "none",
         plot.title = element_text(hjust = 0.5, size = 50),
@@ -156,7 +158,7 @@ national <- epl%>%
   geom_col(aes(fill = country)) + 
   labs(x = "Country of Origin",
        y = "Percentage",
-       title = "Country of Origin for Premier League Managers") +
+       title = "Nationality for Premier League Managers") +
   scale_fill_scico_d(palette = "bam") +
   scale_y_continuous(labels = label_percent()) +
   theme(legend.position = "none",
@@ -203,7 +205,10 @@ all_club <- epl%>%
   coord_flip() +
   theme(plot.title = element_text(hjust = 0.5, size = 50),
         axis.title = element_text(size = 30),
-        axis.text = element_text(size = 25))
+        axis.text = element_text(size = 25),
+        legend.title = element_text(size = 35),
+        legend.key.size  = unit(3, "cm"),
+        legend.text = element_text(size = 20))
 
 
 
@@ -221,9 +226,12 @@ top_club <- epl%>%
   scale_fill_scico_d(palette = "bam") +
   scale_y_continuous(breaks = seq(2, 12, 2)) +
   coord_flip() +
-  theme(plot.title = element_text(hjust = 0.5, size = 50),
-        axis.title = element_text(size = 30),
-        axis.text = element_text(size = 25))
+  theme(plot.title = element_text(hjust = 0.5, size = 12),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 10),
+        legend.title = element_text(size = 15),
+        legend.key.size  = unit(0.5, "cm"),
+        legend.text = element_text(size = 10))
 
   
 
@@ -269,7 +277,8 @@ debut <- epl %>%
        title = "Percentage of Managers' Debut Match Win, Loss or Draw",
        subtitle = "They say the English League is very intense and quite competitive.\nFamous managers like Arsene Wenger, Josep Guardiola, Jose Mourinho won their Premier League debut match.\nSir Alex lost his debut macth while Jurgen Klopp drew his debut match.") +
   theme(plot.title = element_text(hjust = 0.5, size = 50),
-        plot.subtitle = element_text(face = "italic", colour = "darkorchid"),
+        plot.subtitle = element_text(face = "italic", size = 30, colour = "grey"),
+        legend.text = element_text(size = 15),
         axis.title = element_text(size = 30),
         axis.text = element_text(size = 25))
 
@@ -308,10 +317,10 @@ debut_nat <- epl %>%
        fill = "Match Result") +
   theme(plot.title = element_text(hjust = 0.5, size = 50),
         axis.title = element_text(size = 30),
-        axis.text = element_text(size = 25))
-
-
-
+        axis.text = element_text(size = 25),
+        legend.title = element_text(size = 15),
+        legend.key.size  = unit(3, "cm"),
+        legend.text = element_text(size = 20))
   
 ```
 {{< /panel >}}

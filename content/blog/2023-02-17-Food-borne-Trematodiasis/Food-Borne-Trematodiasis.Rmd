@@ -6,7 +6,7 @@ draft: false
 # layout options: single, single-sidebar
 layout: single-sidebar
 categories:
-- parasites
+- parasites, blog
 ---
 
 
@@ -49,7 +49,6 @@ library(here)
 library(tidyverse)
 library(ggimage)
 library(magick)
-library(blogdown)
 
 ```
 
@@ -57,7 +56,7 @@ library(blogdown)
 {{< panelset class="greetings" >}}
 {{< panel name="Life Cycle" >}}
 
-```{r plot, echo=FALSE}
+```{r plot, fig.width = 25, fig.height = 23.63, echo=FALSE}
 
 life_cycle <- here("content", "blog", "2023-02-17-Food-borne-Trematodiasis", "life_cycle.jpg")
 

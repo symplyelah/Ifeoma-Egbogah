@@ -7,6 +7,8 @@ draft: false
 layout: single-sidebar
 categories:
 - project, football
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -23,93 +25,6 @@ Let's start by loading in the data and packages into R. Data was gotten from the
 {{< panel name = "Packages" >}}
 
 
-```
-## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
-```
-
-```
-## v ggplot2 3.3.5     v purrr   0.3.4
-## v tibble  3.1.6     v dplyr   1.0.8
-## v tidyr   1.2.0     v stringr 1.4.0
-## v readr   2.1.2     v forcats 0.5.1
-```
-
-```
-## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-```
-
-```
-## 
-## Attaching package: 'lubridate'
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     date, intersect, setdiff, union
-```
-
-```
-## 
-## Attaching package: 'janitor'
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     chisq.test, fisher.test
-```
-
-```
-## here() starts at C:/Users/Egbogah-2/Documents/Rworks/rsites/Ifeoma-Egbogah
-```
-
-```
-## 
-## Attaching package: 'scales'
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     discard
-```
-
-```
-## The following object is masked from 'package:readr':
-## 
-##     col_factor
-```
-
-```
-## Rows: 219 Columns: 11
-## -- Column specification --------------------------------------------------------
-## Delimiter: ","
-## chr  (4): Managers, Clubs, Nationality, Debut_Match
-## dbl  (5): Total.Games.Managed, Games_Won, Games_Drawn, Games_Lost, Num_of_PL...
-## date (2): Date_of_birth, PL_Debut
-## 
-## i Use `spec()` to retrieve the full column specification for this data.
-## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
-```
-
-```
-## Rows: 219
-## Columns: 11
-## $ managers            <chr> "Eddie Howe", "Brue Rioch", "Arsene Wenger", "Stew~
-## $ clubs               <chr> "Bournemouth", "Arsenal", "Arsenal", "Arsenal", "A~
-## $ total_games_managed <dbl> 114, 38, 828, 19, 343, 1, 45, 89, 144, 20, 10, 249~
-## $ games_won           <dbl> 34, 17, 476, 7, 148, 1, 19, 21, 53, 2, 3, 118, 12,~
-## $ games_drawn         <dbl> 30, 12, 199, 4, 82, 0, 5, 19, 39, 6, 2, 65, 20, 52~
-## $ games_lost          <dbl> 50, 9, 153, 8, 104, 0, 21, 49, 52, 12, 5, 66, 22, ~
-## $ num_of_pl_seasons   <dbl> 3, 1, 22, 2, 7, 1, 3, 3, 4, 1, 3, 7, 2, 4, 2, 3, 2~
-## $ nationality         <chr> "England", "Scotland", "France", "Scotland", "Engl~
-## $ date_of_birth       <date> 1977-11-29, 1947-09-06, 1949-10-22, 1949-08-20, 1~
-## $ pl_debut            <date> 2015-08-08, 1995-08-20, 1996-10-12, 1995-02-21, 1~
-## $ debut_match         <chr> "Lost", "Drawn", "Won", "Won", "na", "Won", "Won",~
-```
 
 {{< /panel >}}
 {{< /panelset >}}
