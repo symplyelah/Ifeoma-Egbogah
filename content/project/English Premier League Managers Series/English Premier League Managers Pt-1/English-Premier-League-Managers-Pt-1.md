@@ -149,7 +149,7 @@ Lets get a better view of what the age distribution looks like by plotting a his
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Age Distribution" >}}
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/Age Distribution-1.png" width="2400" />
+<img src="/project/English Premier League Managers Series/English Premier League Managers Pt-1/English-Premier-League-Managers-Pt-1_files/figure-html/Age Distribution-1.png" width="2400" />
 
 {{< /panel >}}
 {{< panel name = "Code" >}}
@@ -177,7 +177,7 @@ One thing the English League is known for is the wide range in the nationality o
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Nationality" >}}
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/Nationality-1.png" width="2400" />
+<img src="/project/English Premier League Managers Series/English Premier League Managers Pt-1/English-Premier-League-Managers-Pt-1_files/figure-html/Nationality-1.png" width="2400" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -207,7 +207,7 @@ Err... it looks a bit scattered let's arrange it in descending order based on th
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Nationality Arranged" >}}
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/Origin-1.png" width="2400" />
+<img src="/project/English Premier League Managers Series/English Premier League Managers Pt-1/English-Premier-League-Managers-Pt-1_files/figure-html/Origin-1.png" width="2400" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -244,7 +244,7 @@ A popular opinion among sports pundits is that English managers haven't been giv
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Club" >}}
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/Clubs-1.png" width="2400" /><img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/Clubs-2.png" width="2400" />
+<img src="/project/English Premier League Managers Series/English Premier League Managers Pt-1/English-Premier-League-Managers-Pt-1_files/figure-html/Clubs-1.png" width="2400" /><img src="/project/English Premier League Managers Series/English Premier League Managers Pt-1/English-Premier-League-Managers-Pt-1_files/figure-html/Clubs-2.png" width="2400" />
 
 {{< /panel >}}
 {{< panel name = "Code" >}}
@@ -311,7 +311,7 @@ David O'Leary and Martin O'Neill had no information on their English premier lea
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Match Result" >}}
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/Match Result-1.png" width="2400" />
+<img src="/project/English Premier League Managers Series/English Premier League Managers Pt-1/English-Premier-League-Managers-Pt-1_files/figure-html/Match Result-1.png" width="2400" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -343,7 +343,7 @@ Out of the 112 English managers in the league 50 lost their debut matches. So fa
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Debut Result by Nationality" >}}
-<img src="/project/English Premier League Managers/English-Premier-League-Managers-Pt-1_files/figure-html/Debut Result-1.png" width="2400" />
+<img src="/project/English Premier League Managers Series/English Premier League Managers Pt-1/English-Premier-League-Managers-Pt-1_files/figure-html/Debut Result-1.png" width="2400" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
