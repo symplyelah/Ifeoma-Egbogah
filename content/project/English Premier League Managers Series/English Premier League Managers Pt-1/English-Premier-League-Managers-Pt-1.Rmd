@@ -32,7 +32,7 @@ library(scales)
 library(scico)
 theme_set(theme_light())
 
-epl <- clean_names(read_csv(here("content", "project", "English Premier League Managers", "EPL.csv")))
+epl <- clean_names(read_csv(here("content", "project", "English Premier League Managers Series", "EPL.csv")))
 
 
 ```
