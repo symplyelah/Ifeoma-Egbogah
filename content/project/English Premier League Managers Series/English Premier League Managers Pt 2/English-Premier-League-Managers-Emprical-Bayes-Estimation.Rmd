@@ -1,5 +1,5 @@
 ---
-title: "English Premier League Managers: Emprical Bayes Estimation"
+title: "English Premier League Managers: Empirical Bayes Estimation"
 date: 2023-03-21
 author: "Ifeoma Egbogah"
 draft: false
@@ -37,6 +37,7 @@ library(janitor)
 library(scales)
 library(lubridate)
 library(ggthemes)
+library(scico)
 theme_set(theme_light())
 
 epl <- clean_names(read_csv(here("content", "project", "English Premier League Managers Series", "EPL.csv")))
@@ -123,33 +124,32 @@ Let's have a look at the distribution of the raw winning averages of the manager
 
 ```{r}
 
-epl%>%
+rwa_distr <- epl%>%
   ggplot(aes(average)) + 
   geom_histogram(binwidth=0.1, fill="darkorchid4") + 
   labs(x = "Winning Averages",
        y = "Counts",
        title = "Distribution of Winning Averages")
 
-
+rwa_distr
 ```
 
 
 
 ## Empirical Bayes: Prior Distribution
 
+We have seen the raw winning averages now lets get a better estimate using empirical Bayes. The first step in Bayesian analysis is to choose a prior distribution. Since we are using empirical Bayes we will be taking our prior distribution from the data. Not very Bayesian. I know, I know. Since I have a reasonable amount of data I decided to use empirical Bayes. Since our data is binomial will be fitting the beta distribution to our data to get our prior. This is our model: 
 
-  We have seen the raw winning averages now lets get a better estimate using empirical bayes. The first step in bayesian analysis is to choose a prior distribution. Since we are using empirical bayes we will be taking our prior distribution from the data. Not very bayesian. I know, I know. Since I have a reasonable amount of data I decided to use empirical bayes. Since our data is binomial will be fitting the beta distribution to our data to get our prior. This is our model: 
+$$Y\sim\mbox{Binomial} (Total\ Games\ Managed,\ X)$$
 
-$$Y\sim\mbox{Binomial} (Total Games Managed, X)$$
-
-$$X\sim\mbox{Beta}(\alpha, \beta)$$
+$$X\sim\mbox{Beta}(\alpha,\ \beta)$$
 
 
-To get the hyperparameters 
+To get the hyper parameters
 $$\alpha$$ 
 and 
 $$\beta$$ 
-for our model we will be using the maximum likelihood estimation. The method of moments can also be used. This uses the mean and the variance of the data. The formular for the method of moments is: 
+for our model we will be using the maximum likelihood estimation. The method of moments can also be used. This uses the mean and the variance of the data. The formula for the method of moments is: 
 
 
 $$\mu\ = mean(X)$$
@@ -159,26 +159,26 @@ $$\alpha = ((1 - \mu)/\sigma - 1/\mu) * \mu^2$$
 $$\beta = \alpha * (1 /\mu -1 )$$
 
 
-  The fitdist function from the fitdistrplus package will be used to calculate the maximum likelihood (it can also be used to find the method of moments). I filtered out the winning averages of 1 and 0 to reduce the noise. This gives us 
+The *fitdist* function from the *fitdistrplus* package will be used to calculate the maximum likelihood (it can also be used to find the method of moments). I filtered out the winning averages of 1 and 0 to reduce the noise. This gives us 
 $$\alpha_1$$ = 3.6755, 
 $$\beta_1$$ = 8.203071 
 using maximum likelihood estimation and 
 $$\alpha_2$$ = 3.792916, 
 $$\beta_2$$ = 8.423093 
-for the method of moments. Hmmmm..... Not bad! So we have our shape parameters for the beta distribution, how does this fit to the distribution of the raw winning averages shown by the histogram. Lets plot and see.
+for the method of moments. Hmmmm..... Not bad! So we have our shape parameters for the beta distribution, how does this fit to the distribution of the raw winning averages shown by the histogram. Let's plot and see.
 
 
 
 ```{r, echo=FALSE}
 
 
-EPLman<-EPLmanagers %>%
-  filter(!Average == 0) %>%
-  filter(!Average == 1) 
+epl_man <- epl %>%
+  filter(!average == 0) %>%
+  filter(!average == 1) 
   
 
-mu <- mean(EPLman$Average)
-sigma2 <- var(EPLman$Average)
+mu <- mean(epl_man$average)
+sigma2 <- var(epl_man$average)
 
 alpha0<- ((1-mu)/sigma2 - 1/mu) * mu^2
 beta0 <- alpha0 * (1/mu-1)
@@ -190,7 +190,13 @@ beta0 <- alpha0 * (1/mu-1)
 
 ```{r, echo=FALSE}
 
-ggplot(EPLman) + geom_histogram(aes(Average, y = ..density..), binwidth=0.1, fill="darkorchid4") + stat_function(fun=function(x) dbeta(x, alpha0, beta0), colour="red", size=0.6) + xlab("Winning Average") + ylab("Density") + theme_bw()
+epl_man%>%
+  ggplot() + 
+  geom_histogram(aes(average, y = ..density..), binwidth=0.1, fill="darkorchid4") + 
+  stat_function(fun=function(x) dbeta(x, alpha0, beta0), colour="red", size = 0.6) + 
+  labs(x = "Winning Average",
+       y = "Density") + 
+  theme_bw()
 
 ```
 
@@ -198,15 +204,16 @@ ggplot(EPLman) + geom_histogram(aes(Average, y = ..density..), binwidth=0.1, fil
 
 
 ```{r, echo=FALSE}
+
 library(VGAM)
 
 ll<- function(alpha, beta) {
-  -sum(dbetabinom.ab(EPLman$Games.Won, EPLman$Total.Games.Managed, alpha, beta, log=TRUE))
+  -sum(dbetabinom.ab(epl_man$games_won, epl_man$total_games_managed, alpha, beta, log=TRUE))
   }
 
 n<-mle(ll, start=list(alpha=0.5, beta=0.5), method="L-BFGS-B")
 
-#coef(n)
+coef(n)
 
 ```
 
@@ -216,9 +223,15 @@ n<-mle(ll, start=list(alpha=0.5, beta=0.5), method="L-BFGS-B")
 
 ```{r, echo=FALSE}
 
-b=ggplot(EPLman) + geom_histogram(aes(Average, y = ..density..), binwidth=0.1, fill="darkorchid4") + stat_function(fun=function(x) dbeta(x, 6.441971, 13.508722), colour="red", size=0.6) + xlab("Winning Average") + ylab("Density") + theme_bw(base_size=9)
+epl_man%>%
+  ggplot() + 
+  geom_histogram(aes(average, y = ..density..), binwidth=0.1, fill="darkorchid4") + 
+  stat_function(fun=function(x) dbeta(x, 6.441971, 13.508722), colour="red", size=0.6) + 
+  labs(x = "Winning Average",
+       y = "Density") + 
+  theme_light(base_size = 9)
 
-b
+
 
 ```
 
@@ -228,7 +241,7 @@ b
 
 library(fitdistrplus)
 
-m <- fitdist(EPLman$Average, "beta", method="mme")
+m <- fitdist(epl_man$average, "beta", method="mme")
 
 
 alpha1 <- m$estimate[1]
@@ -251,7 +264,7 @@ library(broom)
 library(MASS)
 
 
-l <- fitdistr(EPLman$Average, dbeta, start = list(shape1 = 0.5, shape2 = 0.5))
+l <- fitdistr(epl_man$average, dbeta, start = list(shape1 = 0.5, shape2 = 0.5))
 
 alpha3 <- l$estimate[1]
 beta3 <- l$estimate[2]
@@ -264,7 +277,7 @@ tidy(l)
 
 ```{r}
 
-e <- fitdist(EPLman$Average, "beta", method="mle")
+e <- fitdist(epl_man$average, "beta", method="mle")
 
 summary(e)
 
@@ -283,7 +296,14 @@ beta2
 
 ```{r}
 
-ggplot(EPLman) + geom_histogram(aes(Average, y = ..density..), binwidth=0.1, fill="darkorchid4") + stat_function(fun=function(x) dbeta(x, alpha2, beta2), colour="red", size=0.6) + xlab("Winning Averages") + ylab("Density") + ggtitle("Prior Distribution Using Maximum Likelihood Estimation") +theme_bw(base_size=9)
+epl_man%>%
+  ggplot() + 
+  geom_histogram(aes(average, y = ..density..), binwidth=0.1, fill="darkorchid4") + 
+  stat_function(fun=function(x) dbeta(x, alpha2, beta2), colour="red", size=0.6) + 
+  labs(x = "Winning Averages",
+  y = "Density",
+  title = "Prior Distribution Using Maximum Likelihood Estimation") +
+  theme_light(base_size = 9)
 
 ```
 
@@ -291,32 +311,37 @@ ggplot(EPLman) + geom_histogram(aes(Average, y = ..density..), binwidth=0.1, fil
 
 ```{r}
 
-ggplot(EPLman) + geom_histogram(aes(Average, y = ..density..), binwidth=0.1, fill="darkorchid4") + stat_function(fun=function(x) dbeta(x, alpha1, beta1), colour="red", size=0.6) + xlab("Winning Averages") + ylab("Density") + ggtitle("Prior Distribution using Method of Moments") + theme_bw(base_size=9)
+epl_man%>%
+  ggplot() + 
+  geom_histogram(aes(average, y = ..density..), binwidth=0.1, fill="darkorchid4") + 
+  stat_function(fun=function(x) dbeta(x, alpha1, beta1), colour="red", size=0.6) + 
+  labs(x = "Winning Averages",
+       y = "Density",
+       title = "Prior Distribution using Method of Moments") +
+  theme_light(base_size=9)
 
 ```
 
 
-Not a bad fit. Next stop empiraical bayes estimate, then posterior probability and finally credible interval.
+Not a bad fit. Next stop empirical Bayes estimate, then posterior probability and finally credible interval.
 
 
-##Empirical Bayes: Calculating the Empirical Bayes Posterior Winning Average 
+## Empirical Bayes: Calculating the Empirical Bayes Posterior Winning Average 
 
-  Since we have our prior probability distribution we can now calculate our posterior winning average for each manager by updating based on individual evidence. We do this by:
+Since we have our prior probability distribution we can now calculate our posterior winning average for each manager by updating based on individual evidence. We do this by:
   
-$$Posterior Winning Estimate = \frac{\alpha_2 + Games Won}{\alpha_2 + \beta_2 + Total Games Managed}$$
+$$Posterior\ Winning\ Estimate = \frac{\alpha_2 + Games\ Won}{\alpha_2 + \beta_2 + Total\ Games\ Managed}$$
 
 Simple right.
 
 ```{r}
 
-#EPLmanagers<-EPLmanagers %>%
-  #mutate(`Winning Estimate`= (`Games Won` + alpha2)/(`Total Games Managed` + alpha2 + beta2))
 
-EPLmanagers<-EPLmanagers %>%
-  mutate(Winning.Estimate= (Games.Won + alpha2)/(Total.Games.Managed + alpha2 + beta2))
+epl <-epl %>%
+  mutate(win_est = (games_won + alpha2)/(total_games_managed + alpha2 + beta2))
 
 
-EPLmanagers
+epl
 
 ```
 
@@ -331,29 +356,29 @@ Drum roll, please...... I present the top ten managers!!!!!! Pep Guadiola tops t
 ```{r}
 
 
-EP2<-EPLmanagers %>%
-  arrange(desc(Winning.Estimate)) %>%
-  dplyr::select(Managers, Total.Games.Managed, Games.Won, Average, Winning.Estimate) %>%
+epl_man2 <- epl %>%
+  arrange(desc(win_est)) %>%
+  dplyr::select(managers, total_games_managed, games_won, average, win_est) %>%
   head(10)
 
-EP2
+epl_man2
 
 ```
 
 
 
-In the table below are the bottom ten managers in the premier league from our estimates.Terry Connor had the lest winning average of 0.1504 (15.04%). As we can see empirical bayes didn't select managers who managed one or two games unlike the raw winning average.
+In the table below are the bottom ten managers in the premier league from our estimates.Terry Connor had the lest winning average of 0.1504 (15.04%). As we can see empirical Bayes didn't select managers who managed one or two games unlike the raw winning average.
 
 
 
 ```{r}
 
-EP3 <- EPLmanagers %>%
-  arrange(Winning.Estimate) %>%
-  dplyr::select(Managers, Total.Games.Managed, Games.Won, Average, Winning.Estimate) %>%
+epl_man3 <- epl %>%
+  arrange(win_est) %>%
+  dplyr::select(managers, total_games_managed, games_won, average, win_est) %>%
   head(10)
 
-EP3
+epl_man3
 
 ```
 
@@ -361,7 +386,7 @@ EP3
 
 ```{r, echo=FALSE}
 
-best<- EPLmanagers %>%
+best <- EPLmanagers %>%
   arrange(desc(Winning.Estimate)) %>%
   dplyr::select(Managers, Total.Games.Managed, Games.Won, Average, Winning.Estimate)
 
@@ -371,42 +396,51 @@ best<- EPLmanagers %>%
 
 ##Empirical Bayes: Posterior Distribution
 
-  We have our posterior winning average, we can determine the shape parameters of the posterior probability distribution for each manager. This is easily done by updating the shape parameters of the prior beta distribution. This is shown in the R code.
+We have our posterior winning average, we can determine the shape parameters of the posterior probability distribution for each manager. This is easily done by updating the shape parameters of the prior beta distribution. This is shown in the R code.
 
 
 
 ```{r}
 
-EPLmanagers <- EPLmanagers%>%
-  mutate(alpha4 = Games.Won + alpha2,
-         beta4 = Total.Games.Managed - Games.Won + beta2)
+epl <- epl%>%
+  mutate(alpha4 = games_won + alpha2,
+         beta4 = total_games_managed - games_won + beta2)
 
-EPLmanagers
+epl
 
 ```
 
 
-Now that we have the $$\alpha$$ and $$\beta$$ for each manager we can now visiualize their posterior probability distribution. We will begin by looking at the posterior probability distribution of the top 5 managers based on our empirical bayes estimatation. 
+Now that we have the $$\alpha$$ and $$\beta$$ for each manager we can now visualize their posterior probability distribution. We will begin by looking at the posterior probability distribution of the top 5 managers based on our empirical Bayes estimation. 
 
 
 ```{r}
 
-EP5<- EPLmanagers %>%
-  arrange(desc(Winning.Estimate)) %>%
-  top_n(5, Winning.Estimate) %>%
+epl_man4 <- epl %>%
+  arrange(desc(win_est)) %>%
+  top_n(5, win_est) %>%
   crossing(x = seq(0.01, 0.8, 0.001))%>%
   ungroup()%>%
-  mutate(density = dbeta(x, Games.Won + alpha2,
-         Total.Games.Managed - Games.Won + beta2)) 
-  
-  ggplot(EP5, aes(x, density, colour=Managers)) + geom_line() + stat_function(fun=function(x)dbeta(x, alpha2, beta2), lty =2, colour="grey50") + labs(x="Winning Averages", y="Density", title="Prior and Posterior Distribution", subtitle="Posterior Distribution of the Top Five Managers Using Emprical Bayes") + theme_minimal(base_size = 9)
+  mutate(density = dbeta(x, games_won + alpha2,
+         total_games_managed - games_won + beta2)) 
+
+epl_man4%>%  
+  ggplot(aes(x, density, colour = managers)) + 
+  geom_line() + 
+  stat_function(fun=function(x)dbeta(x, alpha2, beta2), lty =2, colour="grey50") + 
+  scale_colour_scico_d(palette = "lajolla") +
+  labs(x = "Winning Averages", 
+       y = "Density", 
+       title="Prior and Posterior Distribution", 
+       subtitle="Posterior Distribution of the Top Five Managers Using Emprical Bayes") + 
+  theme_minimal(base_size = 9)
 
 
 ```
 
 
 
-SIr Alex Ferguson has a narrower posterior probability distribution (since he managed more games, we have enough evidence) compared to the broader posterior probability distribuition of Josep Guardiola and Antonio Conte (both managed fewer games than Sir Ferguson). The dashed curve is the prior distribution.
+Sir Alex Ferguson has a narrower posterior probability distribution (since he managed more games, we have enough evidence) compared to the broader posterior probability distribution of Josep Guardiola and Antonio Conte (both managed fewer games than Sir Ferguson). The dashed curve is the prior distribution.
 
 
 Just for fun lets compare the posterior probability distribution of a few managers outside the top 5.
@@ -415,17 +449,27 @@ Just for fun lets compare the posterior probability distribution of a few manage
 
 ```{r}
 
-Manager <- c("Arsene Wenger", "Alex Ferguson", "Ryan Giggs", "Josep Guardiola", "Eric Black", "Alan Shearer")
+manager <- c("Arsene Wenger", "Alex Ferguson", "Ryan Giggs", "Josep Guardiola", "Eric Black", "Alan Shearer")
 
-Manager_career <- EPLmanagers %>%
-  filter(Managers %in% Manager)
+manager_career <- epl %>%
+  filter(managers %in% manager)
 
-Manager_s <- Manager_career %>%
+manager <- manager_career %>%
   crossing(x= seq(0.01, 0.9, 0.001)) %>%
   ungroup() %>%
   mutate(den = dbeta(x, alpha4, beta4))
   
-  ggplot(Manager_s, aes(x, den, colour=Managers)) + geom_line() + stat_function(fun=function(x)dbeta(x, alpha2, beta2), lty =2, colour="black") +  labs(x="Winning Averages", y="Density", title="Prior and Posterior Distribution", subtitle="Posterior Distribution of Some Selected Managers") + theme_minimal(base_size = 9)
+
+manager%>%
+  ggplot(aes(x, den, colour = managers)) + 
+  geom_line() + 
+  stat_function(fun=function(x)dbeta(x, alpha2, beta2), lty =2, colour="black") +  
+  scale_colour_scico_d(palette = "lajolla") +
+  labs(x ="Winning Averages", 
+       y = "Density", 
+       title = "Prior and Posterior Distribution", 
+       subtitle="Posterior Distribution of Some Selected Managers") + 
+  theme_light(base_size = 9)
 
   
 ```
@@ -444,8 +488,17 @@ $$y=\frac{\alpha_2}{\alpha_2 + \beta_2}$$ this shows what each manager's estimat
 
 library(ggrepel)
 
-
-ggplot(EPLmanagers, aes(Average, Winning.Estimate, colour=Total.Games.Managed)) + geom_hline(yintercept = alpha2/(alpha2 + beta2), colour=  "red", lty=2)  +  geom_point() + geom_text_repel(data=subset(EPLmanagers, Total.Games.Managed >= 300), aes(label = Managers), box.padding=unit(0.5, "lines"), colour="black", size=3) + geom_abline(colour="red", linetype=1) + scale_color_gradient(trans= "log", low="midnightblue", high="pink", name="Games Managed", breaks = 10^(1:5)) + xlab("Winning Averages") + ylab("Empirical Bayes Estimate of Winning Average") + ggtitle("Empirical Bayes Estimate vs Raw Estimate", subtitle = "Managers Who Managed More Than 300 games") + theme_minimal(base_size = 9)
+epl%>%
+  ggplot(aes(average, win_est, colour = total_games_managed)) + 
+  geom_hline(yintercept = alpha2/(alpha2 + beta2), colour=  "red", lty=2)  + 
+  geom_point() + 
+  geom_text_repel(data = subset(epl, total_games_managed >= 300), aes(label = managers), box.padding=unit(0.5, "lines"), colour="black", size=3) + 
+  geom_abline(colour = "red", linetype = 1) + 
+  scale_color_gradient(trans= "log", low="midnightblue", high="pink", name="Games Managed", breaks = 10^(1:5)) + 
+  labs(x = "Winning Averages",
+       y = "Empirical Bayes Estimate of Winning Average",
+       title = "Empirical Bayes Estimate vs Raw Estimate", subtitle = "Managers Who Managed More Than 300 games") + 
+  theme_light(base_size = 9)
 
 
 ```
@@ -457,7 +510,17 @@ The estimstes are only different for managers who over saw few games (less than 
 
 ```{r}
 
-ggplot(EPLmanagers, aes(Average, Winning.Estimate, colour=Total.Games.Managed)) + geom_hline(yintercept = alpha2/(alpha2 + beta2), colour=  "red", lty=2)  +  geom_point() + geom_text_repel(data=subset(EPLmanagers, Total.Games.Managed <= 1.5), aes(label = Managers, colour="grey50"), box.padding=unit(0.5, "lines"), force=1.9, colour="black", size=3) + geom_abline(colour="red", linetype=1) + scale_color_gradient(trans= "log", low="midnightblue", high="pink", name="Games Managed", breaks = 10^(1:5)) + xlab("Winning Averages") + ylab("Empirical Bayes Estimate of Winning Averages") + ggtitle("Empirical Bayes Estimate vs Raw Estimate", subtitle = "Managers Who Managed Less Than Two games") + theme_minimal(base_size=9)
+epl%>%
+  ggplot(aes(average, win_est, colour = total_games_managed)) +
+  geom_hline(yintercept = alpha2/(alpha2 + beta2), colour=  "red", lty=2)  +
+  geom_point() + 
+  geom_text_repel(data=subset(epl, total_games_managed <= 1.5), aes(label =  managers, colour="grey50"), box.padding=unit(0.5, "lines"), force=1.9, colour="black", size=3) + 
+  geom_abline(colour="red", linetype=1) + 
+  scale_color_gradient(trans= "log", low="midnightblue", high="pink", name ="Games Managed", breaks = 10^(1:5)) + 
+  labs(x = "Winning Averages",
+       y = "Empirical Bayes Estimate of Winning Averages",
+       title = "Empirical Bayes Estimate vs Raw Estimate", subtitle = "Managers Who Managed Less Than Two games") + 
+  theme_light(base_size=9)
 
 
 ```
@@ -466,16 +529,16 @@ ggplot(EPLmanagers, aes(Average, Winning.Estimate, colour=Total.Games.Managed)) 
 
 ## Empirical Bayes: Credible Interval
 
-  Credible interval tells what percentage (for this example 95%) of the the posterior winning average distribution lies within the interval. It shows how much uncertainity is present in our estimate. Below is the R code. This computed using qbeta.
+Credible interval tells what percentage (for this example 95%) of the the posterior winning average distribution lies within the interval. It shows how much uncertainty is present in our estimate. Below is the R code. This computed using qbeta.
   
 
 ```{r}
 
-EPLmanagers <- EPLmanagers %>%
+epl <- epl %>%
   mutate(low = qbeta(0.25, alpha4, beta4),
          high = qbeta(0.975, alpha4, beta4))
 
-EPLmanagers
+epl
 
 ```
 
@@ -483,12 +546,12 @@ EPLmanagers
 ```{r}
 
 
-EP7 <- EPLmanagers%>%
-  arrange(desc(Winning.Estimate))%>%
-  dplyr::select(Managers, Games.Won, Total.Games.Managed, Winning.Estimate, low, high)%>%
+credible_interval <- epl%>%
+  arrange(desc(win_est))%>%
+  select(managers, games_won, total_games_managed, win_est, low, high)%>%
   head(10)
 
-EP7
+credible_interval
 
 
 ```
@@ -499,48 +562,63 @@ For managers in the top 20 the credible interval is narrow for managers such as 
 
 ```{r}
 
-Man <- c("Alex Ferguson", "Felipe Scolari")
+manager_ci <- c("Alex Ferguson", "Felipe Scolari")
 
-CI<- EPLmanagers %>%
-  filter(Managers %in% Man)
+ci <- epl %>%
+  filter(managers %in% manager_ci)
 
-CI2 <- CI %>%
+ci2 <- ci %>%
   crossing(x = seq(0.005, 0.9, 0.001)) %>%
   ungroup() %>% 
   mutate(density1 = dbeta(x, alpha4, beta4))
  
   
-CI3 <- CI2 %>%
+ci3 <- ci2 %>%
   mutate(cum = pbeta(x, alpha4, beta4)) %>%
   filter(cum > .025, cum < .975)
   
 
-CI2 %>%
-ggplot(aes(x, density1, colour=Managers)) + geom_line(show.legend="FALSE") + geom_ribbon(aes(ymin=0, ymax=density1), data=CI3, alpha=0.5, fill="orange", show.legend = FALSE) + stat_function(fun=function(x) dbeta(x, alpha2, beta2), colour="black", lty=2) + geom_errorbarh(aes(xmin= qbeta(0.025, alpha4, beta4), xmax=qbeta(0.975, alpha4, beta4), y=0), height=3, colour="red") + facet_wrap(~Managers) + xlab("Credible Interval") + ylab("Posterior Distribution") +ggtitle("Posterior Distribution and Credible Interval for Sir Alex Ferguson and Felipe Scolari") +  theme_light(base_size=8)
+ci2 %>%
+  ggplot(aes(x, density1, colour = managers)) + 
+  geom_line(show.legend="FALSE") + 
+  geom_ribbon(aes(ymin=0, ymax=density1), data=CI3, alpha=0.5, fill="orange", show.legend = FALSE) + stat_function(fun=function(x) dbeta(x, alpha2, beta2), colour="black", lty=2) + 
+  geom_errorbarh(aes(xmin= qbeta(0.025, alpha4, beta4), xmax=qbeta(0.975, alpha4, beta4), y=0), height=3, colour="red") + 
+  facet_wrap(~managers) + 
+  labs(x = "Credible Interval",
+       y = "Posterior Distribution",
+       title = "Posterior Distribution and Credible Interval for Sir Alex Ferguson and Felipe Scolari") +  
+  theme_light(base_size=8)
 
 
 ```
 
 
 ```{r, echo=FALSE}
-Alex<- EPLmanagers %>%
+
+alex_freggie<- epl %>%
   filter(Managers == "Alex Ferguson") %>%
   crossing(x = seq(0.005, 0.9, 0.001)) %>%
   mutate(density2 = dbeta(x, alpha4, beta4))
   
 
-Alex 
+alex_freggie 
 
-  Feggie <- Alex %>%
+alex_freggie <- alex_freggie %>%
   mutate(cum = pbeta(x, alpha4, beta4)) %>%
   filter(cum > .025, cum < .975)
-  feggie_low <- qbeta(0.025, Alex$alpha4[1], Alex$beta4[1])
-  feggie_high <- qbeta(0.975, Alex$alpha4[1], Alex$beta4[1])
 
-  Feggie
+feggie_low <- qbeta(0.025, alex_freggie$alpha4[1], alex_freggie$beta4[1])
+feggie_high <- qbeta(0.975, alex_freggie$alpha4[1], alex_freggie$beta4[1])
+
   
-Alex %>%
-ggplot(aes(x, density2)) + geom_line() + geom_ribbon(aes(ymin=0, ymax=density2), data=Feggie, alpha=0.25, fill="red")  + stat_function(fun=function(x) dbeta(x, alpha2, beta2), lty=2) + geom_errorbarh(aes(xmin=feggie_low, xmax=feggie_high, y=0), height=1.5, colour="red") + xlab("Credible Interval") + ylab("Posterior Distribution")
+alex_freggie %>%
+  ggplot(aes(x, density2)) + 
+  geom_line() + 
+  geom_ribbon(aes(ymin=0, ymax=density2), data=Feggie, alpha=0.25, fill="red")  + 
+  stat_function(fun=function(x) dbeta(x, alpha2, beta2), lty=2) +
+  geom_errorbarh(aes(xmin=feggie_low, xmax=feggie_high, y=0), height=1.5, colour="red") + 
+  labs(x = "Credible Interval",
+       y = "Posterior Distribution")
 
 
 ```
@@ -551,16 +629,22 @@ Since it is difficult to visiualise the credible interval and posterior probabil
 
 ```{r}
 
-library(tidyr)
 
-EP6<- EPLmanagers %>%
-  arrange(desc(Winning.Estimate)) %>%
-  top_n(20, Winning.Estimate) %>%
-  mutate(Managers = reorder(Managers, Winning.Estimate)) %>%
+epl_man5 <- epl %>%
+  arrange(desc(win_est)) %>%
+  top_n(20, win_est) %>%
+  mutate(managers = reorder(managers, win_est)) %>%
+
   
-  ggplot(aes(Winning.Estimate, Managers, colour=Managers)) + geom_errorbarh(aes(xmin= `low`, xmax= `high`), show.legend = FALSE) + geom_point(show.legend = FALSE) + theme_bw(base_size = 8) + geom_vline(xintercept = alpha2/(alpha2 + beta2), colour="grey50", lty=2)  + xlab("Empirical Bayes Winning Averages with 95% Credible Interval") + ggtitle("Empirical Bayes Winning Averages and Credible Interval for the Top 20 Managers")
+ epl_man5%>%
+  ggplot(aes(Winning.Estimate, Managers, colour=Managers)) +
+  geom_errorbarh(aes(xmin= `low`, xmax= `high`), show.legend = FALSE) +
+  geom_point(show.legend = FALSE) + theme_bw(base_size = 8) +
+  geom_vline(xintercept = alpha2/(alpha2 + beta2), colour="grey50", lty=2)  +
+  labs(x = "Empirical Bayes Winning Averages with 95% Credible Interval",
+       title = "Empirical Bayes Winning Averages and Credible Interval for the Top 20 Managers")
 
-EP6
+
 
 ```
 

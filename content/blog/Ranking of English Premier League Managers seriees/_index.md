@@ -1,8 +1,8 @@
 ---
-title: A Spoonful of Hugo
+title: Ranking of English Premier League Managers
 description: |
   A forking fun new feature for series.
-author: Alison Hill
+author: Ifeoma Egbogah
 show_post_thumbnail: false
 show_author_byline: true
 show_post_date: true
@@ -11,11 +11,10 @@ layout: list-sidebar # list, list-sidebar, list-grid
 
 # for list-sidebar layout
 sidebar: 
-  title: A Spoonful of Hugo
-  author: Alison Hill
+  title: Ranking of English Premier League Managers
+  author: Ifeoma Egbogah
   description: |
-    A forking fun new feature for series.
-    Even this sidebar offers a ton of customizations!
+    A ranking of the English Premier League Managers!
     
     Check out the _index.md file in the /blog/spoonful-series
     folder to edit this content.
@@ -26,8 +25,8 @@ sidebar:
 # set up common front matter for all individual pages in series
 cascade:
   layout: single-series       # for a series, do not change
-  series: A Spoonful of Hugo  # name your series
-  author: Alison Hill
+  series: Ranking of English Premier League Managers  # name your series
+  author: Ifeoma Egbogah
   show_author_byline: true
   show_post_date: true
   sidebar:
