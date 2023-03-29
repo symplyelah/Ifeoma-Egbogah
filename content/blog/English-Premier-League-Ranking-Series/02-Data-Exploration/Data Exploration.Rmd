@@ -42,7 +42,7 @@ epl <- clean_names(read_csv(here("content", "blog", "English-Premier-League-Rank
 ```{r, echo= FALSE}
 
 data <- epl%>%
-  top_n(5)
+  head(5)
 
 knitr::kable(data, col.names = str_to_title(str_replace_all(names(data), "_", " ")))
 
@@ -90,7 +90,7 @@ Lets get a better view of what the age distribution looks like by plotting a his
 {{< panelset class ="greetings" >}}
 {{< panel name = "Age Distribution" >}}
 
-```{r Age Distribution, echo = FALSE, fig.width = 25, fig.height = 23.63}
+```{r Age Distribution, echo = FALSE}
 
 age <- epl%>%
 ggplot(aes(age)) + 
@@ -103,6 +103,8 @@ ggplot(aes(age)) +
         axis.text = element_text(size = 25))
 
 age
+
+![Age Distribution](/Age Distribution-1.png)
 
 ```
 

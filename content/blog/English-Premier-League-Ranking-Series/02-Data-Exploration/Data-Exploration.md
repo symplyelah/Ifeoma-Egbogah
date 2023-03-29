@@ -90,13 +90,13 @@ Lets get a better view of what the age distribution looks like by plotting a his
 {{< panelset class ="greetings" >}}
 {{< panel name = "Age Distribution" >}}
 
-<img src="DATAEX~1/figure-html/Age Distribution-1.png" width="672" />
+<img src="/blog/English-Premier-League-Ranking-Series/02-Data-Exploration/Data-Exploration_files/figure-html/Age Distribution-1.png" width="2400" />
 
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
 ```r
-age <- epl%>%
+epl%>%
 ggplot(aes(age)) + 
   geom_histogram(binwidth = 2, fill = scales::muted("darkorchid"), alpha = 0.8) +
   labs(x = "Age",
@@ -105,8 +105,6 @@ ggplot(aes(age)) +
   theme(plot.title = element_text(hjust = 0.5, size = 50),
         axis.title = element_text(size = 30),
         axis.text = element_text(size = 25))
-
-age
 ```
 {{< /panel >}}
 {{< /panelset  >}}
@@ -118,12 +116,12 @@ One thing the English League is known for is the wide range in the nationality o
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Nationality" >}}
-<img src="DATAEX~1/figure-html/Nationality-1.png" width="2400" />
+<img src="/blog/English-Premier-League-Ranking-Series/02-Data-Exploration/Data-Exploration_files/figure-html/Nationality-1.png" width="2400" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
 ```r
-nationality <- epl %>%
+epl %>%
   count(nationality, sort=TRUE) %>%
  # mutate(nationality = fct_reorder(nationality, n))%>%
   ggplot(aes(nationality, n)) + 
@@ -137,8 +135,6 @@ nationality <- epl %>%
         axis.title = element_text(size = 30),
         axis.text = element_text(size = 25)) + 
   coord_flip()
-
-nationality
 ```
 
 {{< /panel >}}
@@ -148,7 +144,7 @@ Err... it looks a bit scattered let's arrange it in descending order based on th
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Nationality Arranged" >}}
-<img src="DATAEX~1/figure-html/Origin-1.png" width="2400" />
+<img src="/blog/English-Premier-League-Ranking-Series/02-Data-Exploration/Data-Exploration_files/figure-html/Origin-1.png" width="2400" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -185,7 +181,7 @@ A popular opinion among sports pundits is that English managers haven't been giv
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Club" >}}
-<img src="DATAEX~1/figure-html/Clubs-1.png" width="2400" /><img src="DATAEX~1/figure-html/Clubs-2.png" width="2400" />
+<img src="/blog/English-Premier-League-Ranking-Series/02-Data-Exploration/Data-Exploration_files/figure-html/Clubs-1.png" width="2400" /><img src="/blog/English-Premier-League-Ranking-Series/02-Data-Exploration/Data-Exploration_files/figure-html/Clubs-2.png" width="2400" />
 
 {{< /panel >}}
 {{< panel name = "Code" >}}
@@ -252,7 +248,7 @@ David O'Leary and Martin O'Neill had no information on their English premier lea
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Match Result" >}}
-<img src="DATAEX~1/figure-html/Match Result-1.png" width="2400" />
+<img src="/blog/English-Premier-League-Ranking-Series/02-Data-Exploration/Data-Exploration_files/figure-html/Match Result-1.png" width="2400" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -284,7 +280,7 @@ Out of the 112 English managers in the league 50 lost their debut matches. So fa
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Debut Result by Nationality" >}}
-<img src="DATAEX~1/figure-html/Debut Result-1.png" width="2400" />
+<img src="/blog/English-Premier-League-Ranking-Series/02-Data-Exploration/Data-Exploration_files/figure-html/Debut Result-1.png" width="2400" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
