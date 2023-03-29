@@ -38,7 +38,8 @@ cascade:
   tags:
   - hugo-site
   categories:
-  - Theme Features
+  - Football
+  - Bayes
   - R
 ---
 
