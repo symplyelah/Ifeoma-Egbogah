@@ -16,7 +16,7 @@ sidebar:
   description: |
     A ranking of the English Premier League Managers!
     
-    Check out the _index.md file in the /blog/spoonful-series
+    Check out the _index.md file in the /blog/English-Premier-League-Ranking-Series
     folder to edit this content.
   text_link_label: ""
   text_link_url: ""
