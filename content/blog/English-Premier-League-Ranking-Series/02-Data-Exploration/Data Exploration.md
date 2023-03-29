@@ -2,7 +2,7 @@
 title: "English Premier League Managers"
 weight: 2
 subtitle: "Data Exploration"
-excerpt: "Grid is the very first CSS module created specifically to solve the layout problems we’ve all been hacking our way around for as long as we’ve been making websites."
+excerpt: "I recently came across a post that ranked __English Premier League (EPL)__ managers based on their winning percentages. I felt that this approach was unfair to some exceptional managers whose winning averages may not accurately reflect their capabilities due to limited opportunities to manage games."
 date: 2023-03-29
 draft: false
 editor_options: 
@@ -106,7 +106,9 @@ As a first step, I loaded the relevant data and packages into R, with the data o
 Let's start by getting to know the data and see what information we can glean from it. This data covers from 1992 to 2018. I begin by calculating the ages of the managers and the mean age at which managers make a debut in the league. The youngest managers in the league were __Chris Coleman__ and __Attilio Lombardo__ while the oldest was __Dick Advocaat__, making a debut at ages __32__ and __67 years__ respectively. The mean age was __45 years__.
 
 {{< panelset class = "greetings" >}}
-{{< panel name = "Table" >}}
+{{< panel name = "Age" >}}
+
+Table: Table 1: Youngest and Oldest Managers
 
 |Managers         | Age|
 |:----------------|---:|
@@ -130,10 +132,12 @@ age_table <- epl%>%
   select(managers, age)%>%
   filter(age %in% c(32, 67))
 
-knitr::kable(age_table, col.names = c("Managers", "Age"))
+knitr::kable(age_table, col.names = c("Managers", "Age"), caption = "Youngest and Oldest Managers")
 ```
 
 
+
+Table: Table 2: Youngest and Oldest Managers
 
 |Managers         | Age|
 |:----------------|---:|
@@ -146,8 +150,9 @@ knitr::kable(age_table, col.names = c("Managers", "Age"))
 
 Lets get a better view of what the age distribution looks like by plotting a histogram. 
 
-{{< panelset class = "greetings" >}}
+{{< panelset class ="greetings" >}}
 {{< panel name = "Age Distribution" >}}
+
 <img src="DATAEX~1/figure-html/Age Distribution-1.png" width="2400" />
 
 {{< /panel >}}
@@ -167,7 +172,7 @@ ggplot(aes(age)) +
 age
 ```
 {{< /panel >}}
-{{< /panelset >}}
+{{< /panelset  >}}
 
 
 ### Where are they from?
