@@ -236,7 +236,7 @@ epl_man%>%
 
 ```
 {{< /panel >}}
-{{< panel name = "Code"}}
+{{< panel name = "Code" >}}
 ```{r ref.label='prior_distribtuion', fig.show='hide'}
 
 ```

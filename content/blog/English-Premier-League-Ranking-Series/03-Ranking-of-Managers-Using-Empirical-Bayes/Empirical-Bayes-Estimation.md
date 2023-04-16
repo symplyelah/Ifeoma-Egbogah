@@ -329,7 +329,7 @@ Hmmmm..... Not bad! So we have our shape parameters for the beta distribution. H
 {{< panel name = "Prior Distribution" >}}
 <img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/prior_distribution-1.png" width="2400" />
 {{< /panel >}}
-{{< panel name = "Code"}}
+{{< panel name = "Code" >}}
 
 {{< /panel >}}
 {{< /panelset >}}
