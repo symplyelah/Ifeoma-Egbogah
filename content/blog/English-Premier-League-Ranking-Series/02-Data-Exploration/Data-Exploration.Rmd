@@ -2,7 +2,7 @@
 title: "English Premier League Managers"
 weight: 2
 subtitle: "Data Exploration"
-excerpt: "I recently came across a post that ranked __English Premier League (EPL)__ managers based on their winning percentages. I felt that this approach was unfair to some exceptional managers whose winning averages may not accurately reflect their capabilities due to limited opportunities to manage games."
+excerpt: "I recently came across a post that ranked __English Premier League (EPL)__ managers based on their raw winning percentages. I felt that this approach was unfair to some exceptional managers whose winning averages may not accurately reflect their capabilities due to limited opportunities to manage games."
 date: 2023-03-29
 draft: false
 editor_options: 
@@ -14,7 +14,7 @@ editor_options:
 
 ## What in the world!!!
 
-I recently came across a post that ranked __English Premier League (EPL)__ managers based on their winning percentages. I felt that this approach was unfair to some exceptional managers whose winning averages may not accurately reflect their capabilities due to limited opportunities to manage games. For example, comparing a manager who oversaw 16 wins out of 80 games to one with 70 wins out of 350 games, both with a winning average of 20%, would be unfair.
+I recently came across a post that ranked __English Premier League (EPL)__ managers based on their raw winning percentages. I felt that this approach was unfair to some exceptional managers whose winning averages may not accurately reflect their capabilities due to limited opportunities to manage games. For example, comparing a manager who oversaw __16 wins out of 80 games__ to one with __70 wins out of 350__ games, both with a winning average of 20%, would be unfair.
 
 To address this, I decided to use Bayesian inference to determine the best manager in the Premier League, hoping that it would be Arsene Wenger, as I am a devoted Arsenal fan. Fingers crossed.
 

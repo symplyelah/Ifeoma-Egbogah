@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-## Empirical Bayes
+## Introduction
 
 In attempting to rank each managers performances thus far in the premier league we are going to calculate their winning average using the Empirical Bayes method.This borrows from Dave's post on __"Understanding Empirical Bayes Estimation Using Baseball Statistics".__ I would suggest you read it. 
 
@@ -58,7 +58,6 @@ But first let's take a look at the raw winning averages for each managers in the
 
 
 Who are the best and worst managers? Let's find out.....
-
 
 
 ```{r, echo=FALSE}
@@ -136,9 +135,10 @@ rwa_distr
 
 
 
-## Empirical Bayes: Prior Distribution
+## Empirical Bayes 
+### Step 1: Prior Distribution
 
-We have seen the raw winning averages now lets get a better estimate using empirical Bayes. The first step in Bayesian analysis is to choose a prior distribution. Since we are using empirical Bayes we will be taking our prior distribution from the data. Not very Bayesian. I know, I know. Since I have a reasonable amount of data I decided to use empirical Bayes. Since our data is binomial will be fitting the beta distribution to our data to get our prior. This is our model: 
+As we can see the raw winning average isn't a good estimate for determining who the best and worst managers are in the league. Let's get a better estimate using the empirical Bayes. The first step in Bayesian analysis is to choose a prior distribution. Since we are using empirical Bayes we will be taking our prior distribution from the data. Not very Bayesian. I know, I know. Since I have a reasonable amount of data I decided to use empirical Bayes. Since our data is binomial we will be fitting the beta distribution to our data to get our prior. This is what our model looks like: 
 
 $$Y\sim\mbox{Binomial} (Total\ Games\ Managed,\ X)$$
 
