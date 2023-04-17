@@ -3,7 +3,7 @@ title: "English Premier League Managers"
 weight: 3
 subtitle: "The Best and Worst EPL Managers Using Emprirical Bayes"
 excerpt: " "
-date: 2023-04-04
+date: 2023-04-17
 draft: false
 editor_options: 
   chunk_output_type: console
