@@ -19,7 +19,7 @@ So we are going to use the empirical Bayes method to:
 ** estimate their credible interval
 
 
-Let's load our data set (data used in <a href="#Data-Exploration"><strong>??</strong></a>) and packages into R.
+Let's load our data set (data used in the Data-Exploration blog post (https://ifeoma-egbogah.netlify.app/blog/english-premier-league-ranking-series/02-data-exploration/data-exploration/)) and packages into R.
 
 
 
@@ -230,7 +230,7 @@ epl%>%
 
 <img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/rwa_distri-1.png" width="2400" />
 {{< /panel >}}
-{{< panel name = "Code"}}
+{{< panel name = "Code" >}}
 
 ```r
 epl%>%
@@ -300,7 +300,7 @@ The *fitdist* function from the *fitdistrplus* package can be used to calculate 
 ## 8.631809
 ```
 {{< /panel >}}
-{{ panel name = "Code"}}
+{{< panel name = "Code" >}}
 
 ```
 ## Fitting of the distribution ' beta ' by matching moments 
@@ -391,7 +391,7 @@ Table: (\#tab:top_eb_estimate)Top 10 Best Managers in the Premier League Using E
 |Rafael Benitez    |                 302|       156| 0.5165563|          0.5081770|
 |Jurgen Klopp      |                 106|        56| 0.5283019|          0.5048216|
 {{< /panel }}
-{{< panel name = "Code"}}
+{{< panel name = "Code" >}}
 
 ```r
 epl_man2 <- epl %>%
@@ -471,7 +471,7 @@ Table: (\#tab:post_distri)Shape Parameters for Posterior Distribtuion
 |Brian Little    |Aston Villa |                 144|        53|          39|         52|                 4|England     |1953-11-25    |1994-08-21 |Lost        | 0.3680556|          0.3629901|  56.773622|  99.631809|
 |Remi Garde      |Aston Villa |                  20|         2|           6|         12|                 1|France      |1966-04-03    |2015-11-08 |Drawn       | 0.1000000|          0.1781683|   5.773622|  26.631809|
 {{< /panel >}}
-{{ panel name = "Code"}}
+{{ panel name = "Code" >}}
 
 ```r
 epl <- epl%>%
@@ -510,7 +510,7 @@ Now that we have the `$$\alpha$$` and `$$\beta$$` for each manager we can now vi
 {{< panel name = "Posterior Distribution of Top 5 Managers" >}}
 <img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/pd_top-1.png" width="2400" />
 {{< /panel >}}
-{{< panel name = "Code"}}
+{{< panel name = "Code" >}}
 
 ```r
 epl_man4 <- epl %>%

@@ -19,7 +19,7 @@ So we are going to use the empirical Bayes method to:
 ** estimate their credible interval
 
 
-Let's load our data set (data used in \@ref(Data-Exploration)) and packages into R.
+Let's load our data set (data used in the Data-Exploration blog post (https://ifeoma-egbogah.netlify.app/blog/english-premier-league-ranking-series/02-data-exploration/data-exploration/)) and packages into R.
 
 
 ```{r echo=FALSE}
@@ -152,7 +152,7 @@ epl%>%
 
 ```
 {{< /panel >}}
-{{< panel name = "Code"}}
+{{< panel name = "Code" >}}
 ```{r ref.label= 'rwa_distri', fig.show='hide'}
 
 ```
@@ -206,7 +206,7 @@ beta
 
 ```
 {{< /panel >}}
-{{ panel name = "Code"}}
+{{< panel name = "Code" >}}
 ```{r ref.label = 'mle', echo=FALSE, fig.show='hide'}
 
 ```
@@ -285,7 +285,7 @@ knitr::kable(epl_man2, caption = "Top 10 Best Managers in the Premier League Usi
 
 ```
 {{< /panel }}
-{{< panel name = "Code"}}
+{{< panel name = "Code" >}}
 ```{r ref.label='top_eb_estimate', fig.show='hide'}
 
 ```
@@ -337,7 +337,7 @@ knitr::kable(top_10, caption = "Shape Parameters for Posterior Distribtuion", co
 
 ```
 {{< /panel >}}
-{{ panel name = "Code"}}
+{{ panel name = "Code" >}}
 ```{r ref.label = 'post_distri'}
 
 ```
@@ -379,7 +379,7 @@ epl_man4%>%
 
 ```
 {{< /panel >}}
-{{< panel name = "Code"}}
+{{< panel name = "Code" >}}
 ```{r ref.label= 'pd_top', fig.show='hide'}
 
 ```
