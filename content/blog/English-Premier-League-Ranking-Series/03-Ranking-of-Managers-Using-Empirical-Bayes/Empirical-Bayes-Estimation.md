@@ -23,63 +23,6 @@ Let's load our data set (data used in the Data-Exploration blog post (https://if
 
 
 
-```
-## -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
-## v dplyr     1.1.1     v readr     2.1.4
-## v forcats   1.0.0     v stringr   1.5.0
-## v ggplot2   3.4.2     v tibble    3.2.1
-## v lubridate 1.9.2     v tidyr     1.2.0
-## v purrr     0.3.4     
-## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-## i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-## here() starts at C:/Users/Egbogah-2/Documents/Rworks/rsites/Ifeoma-Egbogah
-## 
-## 
-## Attaching package: 'janitor'
-## 
-## 
-## The following objects are masked from 'package:stats':
-## 
-##     chisq.test, fisher.test
-## 
-## 
-## 
-## Attaching package: 'scales'
-## 
-## 
-## The following object is masked from 'package:purrr':
-## 
-##     discard
-## 
-## 
-## The following object is masked from 'package:readr':
-## 
-##     col_factor
-## 
-## 
-## 
-## Attaching package: 'MASS'
-## 
-## 
-## The following object is masked from 'package:dplyr':
-## 
-##     select
-## 
-## 
-## Loading required package: survival
-## 
-## Rows: 219 Columns: 11
-## -- Column specification --------------------------------------------------------
-## Delimiter: ","
-## chr  (4): Managers, Clubs, Nationality, Debut_Match
-## dbl  (5): Total.Games.Managed, Games_Won, Games_Drawn, Games_Lost, Num_of_PL...
-## date (2): Date_of_birth, PL_Debut
-## 
-## i Use `spec()` to retrieve the full column specification for this data.
-## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
-```
 
 
 ## Raw Winning Average
@@ -193,12 +136,6 @@ Wow! Isn't that interesting. Looking at the table we know these are neither the 
 
 
 
-```
-## # A tibble: 1 x 1
-##   rwa_mean
-##      <dbl>
-## 1    0.282
-```
 
 We definitely need a better estimate. *Let's get it.*
 
@@ -209,25 +146,6 @@ We will begin by looking at the distribution of the raw winning averages of the 
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Raw Winning Average Distribution of Managers" >}}
-
-```r
-epl%>%
-  dplyr::select(managers, total_games_managed, games_won, games_drawn, games_lost)%>%
-  #pivot_longer(cols = starts_with("game"), names_to = "outcome", values_to = "games")%>%
-  mutate(average = games_won/total_games_managed)%>%
-  ggplot(aes(average)) + 
-  geom_histogram(binwidth = 0.1, fill="darkorchid4") + 
-  labs(x = "Winning Averages",
-       y = "Counts",
-       title = "Distribution of EPL Managers' Winning Average from 1992 to 2018") +
-  theme(plot.title = element_text(hjust = 0.5, size = 50),
-        axis.title = element_text(size = 30),
-        axis.text = element_text(size = 25),
-        legend.title = element_text(size = 40),
-        legend.key.size  = unit(3, "cm"),
-        legend.text = element_text(size = 20))
-```
-
 <img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/rwa_distri-1.png" width="2400" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
@@ -242,12 +160,9 @@ epl%>%
   labs(x = "Winning Averages",
        y = "Counts",
        title = "Distribution of EPL Managers' Winning Average from 1992 to 2018") +
-  theme(plot.title = element_text(hjust = 0.5, size = 50),
+  theme(plot.title = element_text(hjust = 0.5, size = 45),
         axis.title = element_text(size = 30),
-        axis.text = element_text(size = 25),
-        legend.title = element_text(size = 40),
-        legend.key.size  = unit(3, "cm"),
-        legend.text = element_text(size = 20))
+        axis.text = element_text(size = 30))
 ```
 {{< /panel >}}
 {{< /panelset >}}
@@ -302,6 +217,16 @@ The *fitdist* function from the *fitdistrplus* package can be used to calculate 
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
+```r
+epl_man <- epl %>%
+  filter(total_games_managed >= 10)
+
+
+e <- fitdist(epl_man$average, "beta", method="mme")
+
+summary(e)
+```
+
 ```
 ## Fitting of the distribution ' beta ' by matching moments 
 ## Parameters : 
@@ -311,9 +236,20 @@ The *fitdist* function from the *fitdistrplus* package can be used to calculate 
 ## Loglikelihood:  -Inf   AIC:  Inf   BIC:  Inf
 ```
 
+```r
+alpha <- e$estimate[1]
+beta <- e$estimate[2]
+
+alpha
+```
+
 ```
 ##   shape1 
 ## 3.773622
+```
+
+```r
+beta
 ```
 
 ```
@@ -331,6 +267,18 @@ Hmmmm..... Not bad! So we have our shape parameters for the beta distribution. H
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
+```r
+epl_man%>%
+  ggplot() + 
+  geom_histogram(aes(average, y = after_stat(density)), binwidth=0.1, fill = "darkorchid4") + 
+  stat_function(fun = function(x) dbeta(x, alpha, beta), colour="red", linewidth = 0.6) + 
+  labs(x = "Winning Averages",
+  y = "Density",
+  title = "Prior Distribution Using Maximum Likelihood Estimation") +
+  theme(plot.title = element_text(hjust = 0.5, size = 45),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 30))
+```
 {{< /panel >}}
 {{< /panelset >}}
 
@@ -345,27 +293,51 @@ Since we have our prior probability distribution we can now calculate our poster
 
 Simple right.
 
+{{< panelset class = "greetings" >}}
+{{< panel name = "Results" >}}
 
-```
-## # A tibble: 218 x 13
-##    managers        clubs    total_games_managed games_won games_drawn games_lost
-##    <chr>           <chr>                  <dbl>     <dbl>       <dbl>      <dbl>
-##  1 Eddie Howe      Bournem~                 114        34          30         50
-##  2 Brue Rioch      Arsenal                   38        17          12          9
-##  3 Arsene Wenger   Arsenal                  828       476         199        153
-##  4 Stewart Houston Arsenal                   19         7           4          8
-##  5 David O'Leary   Aston V~                 343       148          82        104
-##  6 Jim Barron      Aston V~                   1         1           0          0
-##  7 Tim Sherwood    Aston V~                  45        19           5         21
-##  8 Graham Taylor   Aston V~                  89        21          19         49
-##  9 Brian Little    Aston V~                 144        53          39         52
-## 10 Remi Garde      Aston V~                  20         2           6         12
-## # i 208 more rows
-## # i 7 more variables: num_of_pl_seasons <dbl>, nationality <chr>,
-## #   date_of_birth <date>, pl_debut <date>, debut_match <chr>, average <dbl>,
-## #   eb_winning_average <dbl>
+|Managers        |   Average| Eb Winning Average|
+|:---------------|---------:|------------------:|
+|Eddie Howe      | 0.2982456|          0.2988291|
+|Brue Rioch      | 0.4473684|          0.4121306|
+|Arsene Wenger   | 0.5748792|          0.5708835|
+|Stewart Houston | 0.3684211|          0.3430496|
+|David O'Leary   | 0.4314869|          0.4270436|
+|Jim Barron      | 1.0000000|          0.3560961|
+|Tim Sherwood    | 0.4222222|          0.3967155|
+|Graham Taylor   | 0.2359551|          0.2443027|
+|Brian Little    | 0.3680556|          0.3629901|
+|Remi Garde      | 0.1000000|          0.1781683|
+{{< /panel >}}
+{{< panel name = "Code" >}}
+
+```r
+epl <-epl %>%
+  mutate(eb_winning_average = (games_won + alpha)/(total_games_managed + alpha + beta))
+
+
+epl%>%
+  dplyr::select(managers, average, eb_winning_average)%>%
+  head(10)%>%
+  knitr::kable(col.names = str_to_title(str_replace_all(names(.), "_", " ")))
 ```
 
+
+
+|Managers        |   Average| Eb Winning Average|
+|:---------------|---------:|------------------:|
+|Eddie Howe      | 0.2982456|          0.2988291|
+|Brue Rioch      | 0.4473684|          0.4121306|
+|Arsene Wenger   | 0.5748792|          0.5708835|
+|Stewart Houston | 0.3684211|          0.3430496|
+|David O'Leary   | 0.4314869|          0.4270436|
+|Jim Barron      | 1.0000000|          0.3560961|
+|Tim Sherwood    | 0.4222222|          0.3967155|
+|Graham Taylor   | 0.2359551|          0.2443027|
+|Brian Little    | 0.3680556|          0.3629901|
+|Remi Garde      | 0.1000000|          0.1781683|
+{{< /panel >}}
+{{< /panelset >}}
 
 
 ### Results
@@ -374,9 +346,7 @@ So, who are the best managers by this estimate?
 Drum roll, please...... I present the top ten managers!!!!!! Pep Josep Guadiola tops the pack with a winning average of 0.665 (66.5%). Very impressive for a guy who has only spent two seasons in the league based on this data. Alex Ferguson is second with a winning average of 0.647 (64.7%). Seems the Prof (Arsene Wenger) comes in at number 8 with a winning average of 0.571 (57.10%). 
 
 {{< panelset class = "greetings" >}}
-{{< panel name = "Top 10 Managers Using Emprirical Bayes" >}}
-
-Table: (\#tab:top_eb_estimate)Top 10 Best Managers in the Premier League Using Empirical Bayes
+{{< panel name = "Top 10 Managers Using Empirical Bayes" >}}
 
 |Managers          | Total Games Managed| Games Won|   Average| Eb Winning Average|
 |:-----------------|-------------------:|---------:|---------:|------------------:|
@@ -399,12 +369,10 @@ epl_man2 <- epl %>%
   dplyr::select(managers, total_games_managed, games_won, average, eb_winning_average) %>%
   head(10)
 
-knitr::kable(epl_man2, caption = "Top 10 Best Managers in the Premier League Using Empirical Bayes", col.names = str_to_title(str_replace_all(names(epl_man2), "_", " ")))
+knitr::kable(epl_man2, col.names = str_to_title(str_replace_all(names(epl_man2), "_", " ")))
 ```
 
 
-
-Table: Table 1: Top 10 Best Managers in the Premier League Using Empirical Bayes
 
 |Managers          | Total Games Managed| Games Won|   Average| Eb Winning Average|
 |:-----------------|-------------------:|---------:|---------:|------------------:|
@@ -427,8 +395,6 @@ Onto the bottom ten managers in the premier league from our estimates, Terry Con
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Bottom 10 Managers Using Empirical Bayes" >}}
-
-Table: (\#tab:bottom_eb_estimate)Top 10 Worst Managers in The Premier League Using Empirical Bayes
 
 |Managers        | Total Games Managed| Games Won|   Average| Eb Winning Average|
 |:---------------|-------------------:|---------:|---------:|------------------:|
@@ -456,22 +422,20 @@ We have our posterior winning average, we can determine the shape parameters of 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Posterior Distribution" >}}
 
-Table: (\#tab:post_distri)Shape Parameters for Posterior Distribtuion
-
-|Managers        |Clubs       | Total Games Managed| Games Won| Games Drawn| Games Lost| Num Of Pl Seasons|Nationality |Date Of Birth |Pl Debut   |Debut Match |   Average| Eb Winning Average|     Alpha2|      Beta2|
-|:---------------|:-----------|-------------------:|---------:|-----------:|----------:|-----------------:|:-----------|:-------------|:----------|:-----------|---------:|------------------:|----------:|----------:|
-|Eddie Howe      |Bournemouth |                 114|        34|          30|         50|                 3|England     |1977-11-29    |2015-08-08 |Lost        | 0.2982456|          0.2988291|  37.773622|  88.631809|
-|Brue Rioch      |Arsenal     |                  38|        17|          12|          9|                 1|Scotland    |1947-09-06    |1995-08-20 |Drawn       | 0.4473684|          0.4121306|  20.773622|  29.631809|
-|Arsene Wenger   |Arsenal     |                 828|       476|         199|        153|                22|France      |1949-10-22    |1996-10-12 |Won         | 0.5748792|          0.5708835| 479.773622| 360.631809|
-|Stewart Houston |Arsenal     |                  19|         7|           4|          8|                 2|Scotland    |1949-08-20    |1995-02-21 |Won         | 0.3684211|          0.3430496|  10.773622|  20.631809|
-|David O'Leary   |Aston Villa |                 343|       148|          82|        104|                 7|England     |1958-05-02    |1998-10-01 |na          | 0.4314869|          0.4270436| 151.773622| 203.631809|
-|Jim Barron      |Aston Villa |                   1|         1|           0|          0|                 1|England     |1943-10-19    |1994-11-19 |Won         | 1.0000000|          0.3560961|   4.773622|   8.631809|
-|Tim Sherwood    |Aston Villa |                  45|        19|           5|         21|                 3|England     |1969-02-06    |2013-12-22 |Won         | 0.4222222|          0.3967155|  22.773622|  34.631809|
-|Graham Taylor   |Aston Villa |                  89|        21|          19|         49|                 3|England     |1944-09-15    |1999-08-07 |Lost        | 0.2359551|          0.2443027|  24.773622|  76.631809|
-|Brian Little    |Aston Villa |                 144|        53|          39|         52|                 4|England     |1953-11-25    |1994-08-21 |Lost        | 0.3680556|          0.3629901|  56.773622|  99.631809|
-|Remi Garde      |Aston Villa |                  20|         2|           6|         12|                 1|France      |1966-04-03    |2015-11-08 |Drawn       | 0.1000000|          0.1781683|   5.773622|  26.631809|
+|Managers        |     Alpha2|      Beta2|
+|:---------------|----------:|----------:|
+|Eddie Howe      |  37.773622|  88.631809|
+|Brue Rioch      |  20.773622|  29.631809|
+|Arsene Wenger   | 479.773622| 360.631809|
+|Stewart Houston |  10.773622|  20.631809|
+|David O'Leary   | 151.773622| 203.631809|
+|Jim Barron      |   4.773622|   8.631809|
+|Tim Sherwood    |  22.773622|  34.631809|
+|Graham Taylor   |  24.773622|  76.631809|
+|Brian Little    |  56.773622|  99.631809|
+|Remi Garde      |   5.773622|  26.631809|
 {{< /panel >}}
-{{ panel name = "Code" >}}
+{{< panel name = "Code" >}}
 
 ```r
 epl <- epl%>%
@@ -481,25 +445,25 @@ epl <- epl%>%
 top_10 <- epl%>%
   head(10)
 
-knitr::kable(top_10, caption = "Shape Parameters for Posterior Distribtuion", col.names = str_to_title(str_replace_all(names(top_10), "_", " ")))
+top_10%>%
+  dplyr::select(managers, alpha2, beta2)%>%
+knitr::kable(col.names = str_to_title(names(.)))
 ```
 
 
 
-Table: Table 2: Shape Parameters for Posterior Distribtuion
-
-|Managers        |Clubs       | Total Games Managed| Games Won| Games Drawn| Games Lost| Num Of Pl Seasons|Nationality |Date Of Birth |Pl Debut   |Debut Match |   Average| Eb Winning Average|     Alpha2|      Beta2|
-|:---------------|:-----------|-------------------:|---------:|-----------:|----------:|-----------------:|:-----------|:-------------|:----------|:-----------|---------:|------------------:|----------:|----------:|
-|Eddie Howe      |Bournemouth |                 114|        34|          30|         50|                 3|England     |1977-11-29    |2015-08-08 |Lost        | 0.2982456|          0.2988291|  37.773622|  88.631809|
-|Brue Rioch      |Arsenal     |                  38|        17|          12|          9|                 1|Scotland    |1947-09-06    |1995-08-20 |Drawn       | 0.4473684|          0.4121306|  20.773622|  29.631809|
-|Arsene Wenger   |Arsenal     |                 828|       476|         199|        153|                22|France      |1949-10-22    |1996-10-12 |Won         | 0.5748792|          0.5708835| 479.773622| 360.631809|
-|Stewart Houston |Arsenal     |                  19|         7|           4|          8|                 2|Scotland    |1949-08-20    |1995-02-21 |Won         | 0.3684211|          0.3430496|  10.773622|  20.631809|
-|David O'Leary   |Aston Villa |                 343|       148|          82|        104|                 7|England     |1958-05-02    |1998-10-01 |na          | 0.4314869|          0.4270436| 151.773622| 203.631809|
-|Jim Barron      |Aston Villa |                   1|         1|           0|          0|                 1|England     |1943-10-19    |1994-11-19 |Won         | 1.0000000|          0.3560961|   4.773622|   8.631809|
-|Tim Sherwood    |Aston Villa |                  45|        19|           5|         21|                 3|England     |1969-02-06    |2013-12-22 |Won         | 0.4222222|          0.3967155|  22.773622|  34.631809|
-|Graham Taylor   |Aston Villa |                  89|        21|          19|         49|                 3|England     |1944-09-15    |1999-08-07 |Lost        | 0.2359551|          0.2443027|  24.773622|  76.631809|
-|Brian Little    |Aston Villa |                 144|        53|          39|         52|                 4|England     |1953-11-25    |1994-08-21 |Lost        | 0.3680556|          0.3629901|  56.773622|  99.631809|
-|Remi Garde      |Aston Villa |                  20|         2|           6|         12|                 1|France      |1966-04-03    |2015-11-08 |Drawn       | 0.1000000|          0.1781683|   5.773622|  26.631809|
+|Managers        |     Alpha2|      Beta2|
+|:---------------|----------:|----------:|
+|Eddie Howe      |  37.773622|  88.631809|
+|Brue Rioch      |  20.773622|  29.631809|
+|Arsene Wenger   | 479.773622| 360.631809|
+|Stewart Houston |  10.773622|  20.631809|
+|David O'Leary   | 151.773622| 203.631809|
+|Jim Barron      |   4.773622|   8.631809|
+|Tim Sherwood    |  22.773622|  34.631809|
+|Graham Taylor   |  24.773622|  76.631809|
+|Brian Little    |  56.773622|  99.631809|
+|Remi Garde      |   5.773622|  26.631809|
 {{< /panel >}}
 {{< /panelset >}}
 
@@ -508,6 +472,15 @@ Now that we have the `$$\alpha$$` and `$$\beta$$` for each manager we can now vi
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Posterior Distribution of Top 5 Managers" >}}
+
+```
+## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## i Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.
+```
+
 <img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/pd_top-1.png" width="2400" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
@@ -523,19 +496,21 @@ epl_man4 <- epl %>%
 
 epl_man4%>%  
   ggplot(aes(x, density, colour = managers)) + 
-  geom_line() +
-  stat_function(fun=function(x) dbeta(x, alpha, beta), lty =2, colour = "grey35") + 
+  geom_line(linewidth = 1.8) +
+  stat_function(fun=function(x) dbeta(x, alpha, beta), lty = 2, colour = "grey35", size = 2) + 
   scale_colour_scico_d(palette = "lajolla") +
   labs(x = "Winning Averages", 
        y = "Density", 
        title="Prior and Posterior Distribution", 
-       subtitle="Posterior Distribution of the Top Five Managers Using Emprical Bayes") + 
+       subtitle="Posterior Distribution of the Top Five Managers Using Emprical Bayes",
+       colour = "Managers") + 
   theme(plot.title = element_text(hjust = 0.5, size = 50),
+        plot.subtitle = element_text(size = 35),
         axis.title = element_text(size = 30),
-        axis.text = element_text(size = 25),
+        axis.text = element_text(size = 30),
         legend.title = element_text(size = 40),
         legend.key.size  = unit(3, "cm"),
-        legend.text = element_text(size = 20))
+        legend.text = element_text(size = 30))
 ```
 {{< /panel >}}
 {{< /panelset >}}
@@ -550,10 +525,40 @@ Just for fun lets compare the posterior probability distribution of a few manage
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Posterior Distribution of Some Managers" >}}
-<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/some_manager-1.png" width="2400" />
+<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/some_manager-1.png" width="2880" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
+```r
+manager <- c("Arsene Wenger", "Alex Ferguson", "Ryan Giggs", "Josep Guardiola", "Eric Black", "Alan Shearer")
+
+manager_career <- epl %>%
+  filter(managers %in% manager)
+
+manager <- manager_career %>%
+  crossing(x= seq(0.01, 0.9, 0.001)) %>%
+  ungroup() %>%
+  mutate(density = dbeta(x, alpha2, beta2))
+  
+
+manager%>%
+  ggplot(aes(x, density, colour = managers)) + 
+  geom_line(linewidth = 1.8) + 
+  stat_function(fun=function(x) dbeta(x, alpha, beta), lty =2, colour="grey35", size = 2) +  
+  scale_colour_scico_d(palette = "lajolla") +
+  labs(x ="Winning Averages", 
+       y = "Density", 
+       title = "Prior and Posterior Distribution", 
+       subtitle="Posterior Distribution of Some Selected Managers",
+       colour = "Managers") + 
+  theme(plot.title = element_text(hjust = 0.5, size = 50),
+        plot.subtitle = element_text(size = 35),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 30),
+        legend.title = element_text(size = 40),
+        legend.key.size  = unit(3, "cm"),
+        legend.text = element_text(size = 30))
+```
 {{< /panel >}}
 {{< /panelset >}}
 
@@ -566,7 +571,7 @@ How did our empirical Bayes winning average change compared to the raw winning a
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Empirical Bayes Estimate vs Raw Winning Average" >}}
-<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/eb_vs_rwa-1.png" width="2400" />
+<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/eb_vs_rwa-1.png" width="2880" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -575,27 +580,24 @@ library(ggrepel)
 
 epl%>%
   ggplot(aes(average, eb_winning_average, colour = total_games_managed)) + 
-  geom_hline(yintercept = alpha/(alpha + beta), colour=  "red", lty=2)  + 
-  geom_point() + 
-  geom_text_repel(data = subset(epl, total_games_managed >= 300), aes(label = managers), box.padding=unit(0.5, "lines"), colour="black", size=3) + 
-  geom_abline(colour = "red", linetype = 1) + 
+  geom_hline(yintercept = alpha/(alpha + beta), colour=  "red", lty=2, linewidth = 1.5)  + 
+  geom_point(size = 10) + 
+  geom_text_repel(data = subset(epl, total_games_managed >= 450), aes(label = managers), box.padding=unit(0.5, "lines"), colour="black", size = 12) + 
+  geom_abline(colour = "red", linetype = 1, linewidth = 1.5) + 
   #scale_color_gradient(trans= "log", low="midnightblue", high="pink", name="Games Managed", breaks = 10^(1:5)) + 
   scale_colour_scico(palette = "bam", trans = "log", breaks = 10^(1:5), direction = -1) +
   labs(x = "Raw Winning Averages",
        y = "Empirical Bayes Estimate of Winning Average",
-       title = "Empirical Bayes Estimate vs Raw Estimate", 
-       subtitle = "Managers Who Managed More Than 300 games") + 
-  theme(plot.title = element_text(hjust = 0.5, size = 50),
-        axis.title = element_text(size = 30),
-        axis.text = element_text(size = 25),
-        #legend.title = element_text(size = 40),
+       title = "Empirical Bayes Estimate vs Raw Winning Average", 
+       subtitle = "Names of Managers Who Managed More Than 450 games",
+       colour = "Total Games Managed") + 
+ theme(plot.title = element_text(hjust = 0.5, size = 55),
+        plot.subtitle = element_text(size = 35),
+        axis.title = element_text(size = 35),
+        axis.text = element_text(size = 35),
+        legend.title = element_text(size = 35),
         legend.key.size  = unit(3, "cm"),
-        legend.text = element_text(size = 20))
-```
-
-```
-## Warning: ggrepel: 6 unlabeled data points (too many overlaps). Consider
-## increasing max.overlaps
+        legend.text = element_text(size = 30))
 ```
 {{< /panel >}}
 {{< /panelset >}}
@@ -611,35 +613,35 @@ The estimates are only different for managers who over saw fewer games (less tha
 ## increasing max.overlaps
 ```
 
-<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/less_two-1.png" width="2400" />
+<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/less_two-1.png" width="2880" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
 ```r
 epl%>%
   ggplot(aes(average, eb_winning_average, colour = total_games_managed)) +
-  geom_hline(yintercept = alpha/(alpha + beta), colour=  "red", lty=2)  +
-  geom_point() + 
-  geom_text_repel(data=subset(epl, total_games_managed <= 2), aes(label =  managers, colour="grey50"), box.padding = unit(0.5, "lines"), force=1.9, colour="black", size=3) + 
-  geom_abline(colour = "red", linetype=1) + 
+  geom_hline(yintercept = alpha/(alpha + beta), colour=  "red", lty=2, linewidth = 1.5)  +
+  geom_point(size = 10) + 
+  geom_text_repel(data=subset(epl, total_games_managed <= 2), aes(label =  managers, colour="grey50"), box.padding = unit(0.5, "lines"), force=1.9, colour="black", size= 12) + 
+  geom_abline(colour = "red", linetype=1, linewidth = 1.5) + 
  # scale_color_gradient(trans= "log", low="midnightblue", high="pink", name ="Games Managed", breaks = 10^(1:5)) + 
   scale_colour_scico(palette = "bam", trans = "log", breaks = 10^(1:5), direction = -1) +
   labs(x = "Winning Averages",
        y = "Empirical Bayes Estimate of Winning Averages",
-       title = "Empirical Bayes Estimate vs Raw Estimate", 
+       title = "Empirical Bayes Estimate vs Raw Winning Average", 
        subtitle = "Managers Who Managed Less Than Two games",
        colour = "Games Managed") +
-  theme(plot.title = element_text(hjust = 0.5, size = 50),
+ theme(plot.title = element_text(hjust = 0.5, size = 55),
         plot.subtitle = element_text(size = 35),
-        axis.title = element_text(size = 30),
-        axis.text = element_text(size = 25),
-       # legend.title = element_text(size = 20),
+        axis.title = element_text(size = 35),
+        axis.text = element_text(size = 35),
+        legend.title = element_text(size = 35),
         legend.key.size  = unit(3, "cm"),
-        legend.text = element_text(size = 20))
+        legend.text = element_text(size = 30))
 ```
 
 ```
-## Warning: ggrepel: 17 unlabeled data points (too many overlaps). Consider
+## Warning: ggrepel: 21 unlabeled data points (too many overlaps). Consider
 ## increasing max.overlaps
 ```
 {{< /panel >}}
@@ -651,22 +653,42 @@ epl%>%
 Credible interval tells what percentage (for this example 95%) of the the posterior winning average distribution lies within the interval. It shows how much uncertainty is present in our estimate. This computed using qbeta.
   
 
+
+
+
 {{< panelset class = "greetings" >}}
 {{< panel name = "Credible Interval" >}}
 
+Table: Table 1: Credible Interval
+
+|Managers          | Games Won| Total Games Managed| Eb Winning Average|       Low|      High|
+|:-----------------|---------:|-------------------:|------------------:|---------:|---------:|
+|Josep Guardiola   |        55|                  76|          0.6648191| 0.6316136| 0.7588512|
+|Alex Ferguson     |       528|                 810|          0.6466076| 0.6354285| 0.6789108|
+|Jose Mourinho     |       183|                 288|          0.6217385| 0.6030078| 0.6756766|
+|Antonio Conte     |        51|                  76|          0.6195730| 0.5852000| 0.7173755|
+|Roberto Mancini   |        82|                 133|          0.5898928| 0.5625841| 0.6682698|
+|Carlo Ancelotti   |        48|                  76|          0.5856385| 0.5506062| 0.6856520|
+|Manuel Pellegrini |        70|                 114|          0.5836270| 0.5542667| 0.6678195|
+|Arsene Wenger     |       476|                 828|          0.5708835| 0.5593968| 0.6041582|
+|Rafael Benitez    |       156|                 302|          0.5081770| 0.4891613| 0.5632634|
+|Jurgen Klopp      |        56|                 106|          0.5048216| 0.4738096| 0.5942600|
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
 ```r
-epl <- epl %>%
-  mutate(low = qbeta(0.25, alpha2, beta2),
-         high = qbeta(0.975, alpha2, beta2))
+credible_interval <- epl%>%
+  arrange(desc(eb_winning_average))%>%
+  dplyr::select(managers, games_won, total_games_managed, eb_winning_average, low, high)%>%
+  head(10)
+
+
+knitr::kable(credible_interval, caption = "Credible Interval", col.names = str_to_title(str_replace_all(names(credible_interval), "_", " ")))
 ```
-{{< /panel >}}
-{{< panel name = "Table" >}}
 
 
-Table: Table 3: Credible Interval
+
+Table: Table 2: Credible Interval
 
 |Managers          | Games Won| Total Games Managed| Eb Winning Average|       Low|      High|
 |:-----------------|---------:|-------------------:|------------------:|---------:|---------:|
@@ -687,7 +709,7 @@ Managers in the top 20, their credible intervals are narrow. Managers such as Al
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Alex Ferguson vs Felipe Scolari" >}}
-<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/af_vs_fs-1.png" width="2400" />
+<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/af_vs_fs-1.png" width="2880" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -710,21 +732,23 @@ ci3 <- ci2 %>%
 
 ci2 %>%
   ggplot(aes(x, density1, colour = managers)) + 
-  geom_line(show.legend = FALSE) + 
+  geom_line(show.legend = FALSE, linewidth = 1.5) + 
   geom_ribbon(aes(ymin = 0, ymax = density1), data= ci3, alpha = 0.5, fill = "pink", show.legend = FALSE) + 
-  stat_function(fun=function(x) dbeta(x, alpha, beta), colour="grey65", lty=2) + 
-  geom_errorbarh(aes(xmin= qbeta(0.025, alpha2, beta2), xmax = qbeta(0.975, alpha2, beta2), y = 0), height = 2, colour = "red") + 
+  stat_function(fun=function(x) dbeta(x, alpha, beta), colour="grey35", lty=2, linewidth = 1.5) + 
+  geom_errorbarh(aes(xmin= qbeta(0.025, alpha2, beta2), xmax = qbeta(0.975, alpha2, beta2), y = 0), height = 2, colour = "red", linewidth = 1.3) + 
   facet_wrap(~managers) + 
-  scale_colour_scico_d(palette = "lajolla") +
+  scale_colour_scico_d(palette = "acton") +
   labs(x = "Credible Interval",
        y = "Posterior Distribution",
-       title = "Posterior Distribution and Credible Interval for Sir Alex Ferguson and Felipe Scolari") +  
+       title = "Posterior Distribution and Credible Interval\nfor Sir Alex Ferguson and Felipe Scolari") +  
   theme(plot.title = element_text(hjust = 0.5, size = 50),
-        axis.title = element_text(size = 30),
-        axis.text = element_text(size = 25),
-        #legend.title = element_text(size = 40),
+        plot.subtitle = element_text(size = 35),
+        axis.title = element_text(size = 35),
+        axis.text = element_text(size = 35),
+        strip.text = element_text(size = 40, colour = "black"),
+        legend.title = element_text(size = 35),
         legend.key.size  = unit(3, "cm"),
-        legend.text = element_text(size = 20))
+        legend.text = element_text(size = 30))
 ```
 {{< /panel >}}
 {{< /panelset >}}
@@ -734,7 +758,7 @@ Since it is difficult to visualize the credible interval and posterior probabili
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Top Twenty" >}}
-<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/top20-1.png" width="2400" />
+<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/top20-1.png" width="2880" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -748,19 +772,21 @@ epl_man5 <- epl %>%
   
 epl_man5%>%
   ggplot(aes(eb_winning_average, managers, colour = managers)) +
-  geom_errorbarh(aes(xmin= low, xmax= high), show.legend = FALSE) +
-  geom_point(show.legend = FALSE) + theme_bw(base_size = 8) +
-  geom_vline(xintercept = alpha/(alpha + beta), colour="grey50", lty=2)  +
+  geom_errorbarh(aes(xmin= low, xmax= high), show.legend = FALSE, linewidth = 1.5) +
+  geom_point(show.legend = FALSE, size = 10) + 
+  geom_vline(xintercept = alpha/(alpha + beta), colour="grey50", lty=2, linewidth = 1.5)  +
   scale_colour_scico_d(palette = "lajolla", direction = -1) +
   labs(x = "Empirical Bayes Winning Averages with 95% Credible Interval",
        y = "Managers",
-       title = "Empirical Bayes Winning Averages and Credible Interval for the Top 20 Managers")+
-  theme(plot.title = element_text(hjust = 0.5, size = 50),
-        axis.title = element_text(size = 30),
-        axis.text = element_text(size = 25),
-       # legend.title = element_text(size = 40),
+       title = "Empirical Bayes Winning Averages and Credible Interval\nfor the Top 20 Managers",
+       colour = "Managers")+
+  theme(plot.title = element_text(hjust = 0.5, size = 55),
+        plot.subtitle = element_text(size = 35),
+        axis.title = element_text(size = 35),
+        axis.text = element_text(size = 35),
+        legend.title = element_text(size = 35),
         legend.key.size  = unit(3, "cm"),
-        legend.text = element_text(size = 20))
+        legend.text = element_text(size = 30))
 ```
 {{< /panel >}}
 {{< /panelset >}}
