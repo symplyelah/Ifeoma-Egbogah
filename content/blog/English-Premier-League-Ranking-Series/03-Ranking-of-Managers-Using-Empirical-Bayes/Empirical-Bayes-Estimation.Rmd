@@ -338,7 +338,7 @@ knitr::kable(top_10, caption = "Shape Parameters for Posterior Distribtuion", co
 ```
 {{< /panel >}}
 {{< panel name = "Code" >}}
-```{r ref.label = 'post_distri'}
+```{r ref.label = 'post_distri', fig.show='hide'}
 
 ```
 {{< /panel >}}
