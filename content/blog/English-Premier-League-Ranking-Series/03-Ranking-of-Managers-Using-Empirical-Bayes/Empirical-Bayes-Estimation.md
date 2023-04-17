@@ -390,7 +390,7 @@ Table: (\#tab:top_eb_estimate)Top 10 Best Managers in the Premier League Using E
 |Arsene Wenger     |                 828|       476| 0.5748792|          0.5708835|
 |Rafael Benitez    |                 302|       156| 0.5165563|          0.5081770|
 |Jurgen Klopp      |                 106|        56| 0.5283019|          0.5048216|
-{{< /panel }}
+{{< /panel >}}
 {{< panel name = "Code" >}}
 
 ```r

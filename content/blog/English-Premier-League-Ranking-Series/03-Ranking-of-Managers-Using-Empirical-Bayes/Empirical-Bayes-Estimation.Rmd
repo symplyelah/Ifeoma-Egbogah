@@ -284,7 +284,7 @@ epl_man2 <- epl %>%
 knitr::kable(epl_man2, caption = "Top 10 Best Managers in the Premier League Using Empirical Bayes", col.names = str_to_title(str_replace_all(names(epl_man2), "_", " ")))
 
 ```
-{{< /panel }}
+{{< /panel >}}
 {{< panel name = "Code" >}}
 ```{r ref.label='top_eb_estimate', fig.show='hide'}
 
