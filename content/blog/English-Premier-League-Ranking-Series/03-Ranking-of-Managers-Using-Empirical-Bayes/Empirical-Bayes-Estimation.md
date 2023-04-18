@@ -10,6 +10,7 @@ editor_options:
 ---
 
 
+
 ## Introduction
 
 In the last post I mentioned I read an article where the __English Premier League__ managers' were ranked based on their raw winning averages. I felt this was a bit unfair. In this post I am going to attempt to rank each managers' performance in the premier league using the Empirical Bayes method to estimate their winning average as against using their raw winning averages and the manager with the highest average is our best manager.This borrows from Dave's post on __"Understanding Empirical Bayes Estimation Using Baseball Statistics".__ (http://varianceexplained.org/). It is a great read. 
@@ -41,18 +42,18 @@ Here are the top ten managers with the highest raw winning average.
 {{< panelset class = "greetings" >}}
 {{< panel name = "Top 10 Managers based on Raw Winning Average" >}}
 
-|Managers          | Total Games Managed| Games Won| Games Drawn| Games Lost|   Average|
-|:-----------------|-------------------:|---------:|-----------:|----------:|---------:|
-|Jim Barron        |                   1|         1|           0|          0| 1.0000000|
-|Eddie Newton      |                   1|         1|           0|          0| 1.0000000|
-|Josep Guardiola   |                  76|        55|          13|          8| 0.7236842|
-|Antonio Conte     |                  76|        51|          10|         15| 0.6710526|
-|Trevor Brooking   |                   3|         2|           1|          0| 0.6666667|
-|Alex Ferguson     |                 810|       528|         168|        114| 0.6518519|
-|Jose Mourinho     |                 288|       183|          65|         40| 0.6354167|
-|Carlo Ancelotti   |                  76|        48|          13|         15| 0.6315789|
-|Roberto Mancini   |                 133|        82|          27|         24| 0.6165414|
-|Manuel Pellegrini |                 114|        70|          21|         23| 0.6140351|
+|Managers          | Total Games Managed| Games Won| Games Drawn| Games Lost| Average|
+|:-----------------|-------------------:|---------:|-----------:|----------:|-------:|
+|Jim Barron        |                   1|         1|           0|          0|   1.000|
+|Eddie Newton      |                   1|         1|           0|          0|   1.000|
+|Josep Guardiola   |                  76|        55|          13|          8|   0.724|
+|Antonio Conte     |                  76|        51|          10|         15|   0.671|
+|Trevor Brooking   |                   3|         2|           1|          0|   0.667|
+|Alex Ferguson     |                 810|       528|         168|        114|   0.652|
+|Jose Mourinho     |                 288|       183|          65|         40|   0.635|
+|Carlo Ancelotti   |                  76|        48|          13|         15|   0.632|
+|Roberto Mancini   |                 133|        82|          27|         24|   0.617|
+|Manuel Pellegrini |                 114|        70|          21|         23|   0.614|
 
 {{< /panel >}}
 {{< panel name = "Code" >}}
@@ -69,18 +70,18 @@ knitr::kable(rwa_top, col.names = str_to_title(str_replace_all(names(rwa_top), "
 
 
 
-|Managers          | Total Games Managed| Games Won| Games Drawn| Games Lost|   Average|
-|:-----------------|-------------------:|---------:|-----------:|----------:|---------:|
-|Jim Barron        |                   1|         1|           0|          0| 1.0000000|
-|Eddie Newton      |                   1|         1|           0|          0| 1.0000000|
-|Josep Guardiola   |                  76|        55|          13|          8| 0.7236842|
-|Antonio Conte     |                  76|        51|          10|         15| 0.6710526|
-|Trevor Brooking   |                   3|         2|           1|          0| 0.6666667|
-|Alex Ferguson     |                 810|       528|         168|        114| 0.6518519|
-|Jose Mourinho     |                 288|       183|          65|         40| 0.6354167|
-|Carlo Ancelotti   |                  76|        48|          13|         15| 0.6315789|
-|Roberto Mancini   |                 133|        82|          27|         24| 0.6165414|
-|Manuel Pellegrini |                 114|        70|          21|         23| 0.6140351|
+|Managers          | Total Games Managed| Games Won| Games Drawn| Games Lost| Average|
+|:-----------------|-------------------:|---------:|-----------:|----------:|-------:|
+|Jim Barron        |                   1|         1|           0|          0|   1.000|
+|Eddie Newton      |                   1|         1|           0|          0|   1.000|
+|Josep Guardiola   |                  76|        55|          13|          8|   0.724|
+|Antonio Conte     |                  76|        51|          10|         15|   0.671|
+|Trevor Brooking   |                   3|         2|           1|          0|   0.667|
+|Alex Ferguson     |                 810|       528|         168|        114|   0.652|
+|Jose Mourinho     |                 288|       183|          65|         40|   0.635|
+|Carlo Ancelotti   |                  76|        48|          13|         15|   0.632|
+|Roberto Mancini   |                 133|        82|          27|         24|   0.617|
+|Manuel Pellegrini |                 114|        70|          21|         23|   0.614|
 {{< /panel >}}
 {{< /panelset >}}
 
@@ -156,7 +157,7 @@ epl%>%
   #pivot_longer(cols = starts_with("game"), names_to = "outcome", values_to = "games")%>%
   mutate(average = games_won/total_games_managed)%>%
   ggplot(aes(average)) + 
-  geom_histogram(binwidth = 0.1, fill="darkorchid4") + 
+  geom_histogram(binwidth = 0.1, fill="pink") + 
   labs(x = "Winning Averages",
        y = "Counts",
        title = "Distribution of EPL Managers' Winning Average from 1992 to 2018") +
@@ -200,19 +201,19 @@ The *fitdist* function from the *fitdistrplus* package can be used to calculate 
 ## Fitting of the distribution ' beta ' by matching moments 
 ## Parameters : 
 ##        estimate
-## shape1 3.773622
-## shape2 8.631809
+## shape1     3.77
+## shape2     8.63
 ## Loglikelihood:  -Inf   AIC:  Inf   BIC:  Inf
 ```
 
 ```
-##   shape1 
-## 3.773622
+## shape1 
+##   3.77
 ```
 
 ```
-##   shape2 
-## 8.631809
+## shape2 
+##   8.63
 ```
 {{< /panel >}}
 {{< panel name = "Code" >}}
@@ -231,8 +232,8 @@ summary(e)
 ## Fitting of the distribution ' beta ' by matching moments 
 ## Parameters : 
 ##        estimate
-## shape1 3.773622
-## shape2 8.631809
+## shape1     3.77
+## shape2     8.63
 ## Loglikelihood:  -Inf   AIC:  Inf   BIC:  Inf
 ```
 
@@ -244,8 +245,8 @@ alpha
 ```
 
 ```
-##   shape1 
-## 3.773622
+## shape1 
+##   3.77
 ```
 
 ```r
@@ -253,8 +254,8 @@ beta
 ```
 
 ```
-##   shape2 
-## 8.631809
+## shape2 
+##   8.63
 ```
 {{< /panel >}}
 {{< /panelset >}}
@@ -270,8 +271,8 @@ Hmmmm..... Not bad! So we have our shape parameters for the beta distribution. H
 ```r
 epl_man%>%
   ggplot() + 
-  geom_histogram(aes(average, y = after_stat(density)), binwidth=0.1, fill = "darkorchid4") + 
-  stat_function(fun = function(x) dbeta(x, alpha, beta), colour="red", linewidth = 0.6) + 
+  geom_histogram(aes(average, y = after_stat(density)), binwidth=0.1, fill = "pink") + 
+  stat_function(fun = function(x) dbeta(x, alpha, beta), colour="grey35", linewidth = 0.6) + 
   labs(x = "Winning Averages",
   y = "Density",
   title = "Prior Distribution Using Maximum Likelihood Estimation") +
@@ -296,18 +297,18 @@ Simple right.
 {{< panelset class = "greetings" >}}
 {{< panel name = "Results" >}}
 
-|Managers        |   Average| Eb Winning Average|
-|:---------------|---------:|------------------:|
-|Eddie Howe      | 0.2982456|          0.2988291|
-|Brue Rioch      | 0.4473684|          0.4121306|
-|Arsene Wenger   | 0.5748792|          0.5708835|
-|Stewart Houston | 0.3684211|          0.3430496|
-|David O'Leary   | 0.4314869|          0.4270436|
-|Jim Barron      | 1.0000000|          0.3560961|
-|Tim Sherwood    | 0.4222222|          0.3967155|
-|Graham Taylor   | 0.2359551|          0.2443027|
-|Brian Little    | 0.3680556|          0.3629901|
-|Remi Garde      | 0.1000000|          0.1781683|
+|Managers        | Average| Eb Winning Average|
+|:---------------|-------:|------------------:|
+|Eddie Howe      |   0.298|              0.299|
+|Brue Rioch      |   0.447|              0.412|
+|Arsene Wenger   |   0.575|              0.571|
+|Stewart Houston |   0.368|              0.343|
+|David O'Leary   |   0.431|              0.427|
+|Jim Barron      |   1.000|              0.356|
+|Tim Sherwood    |   0.422|              0.397|
+|Graham Taylor   |   0.236|              0.244|
+|Brian Little    |   0.368|              0.363|
+|Remi Garde      |   0.100|              0.178|
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -324,18 +325,18 @@ epl%>%
 
 
 
-|Managers        |   Average| Eb Winning Average|
-|:---------------|---------:|------------------:|
-|Eddie Howe      | 0.2982456|          0.2988291|
-|Brue Rioch      | 0.4473684|          0.4121306|
-|Arsene Wenger   | 0.5748792|          0.5708835|
-|Stewart Houston | 0.3684211|          0.3430496|
-|David O'Leary   | 0.4314869|          0.4270436|
-|Jim Barron      | 1.0000000|          0.3560961|
-|Tim Sherwood    | 0.4222222|          0.3967155|
-|Graham Taylor   | 0.2359551|          0.2443027|
-|Brian Little    | 0.3680556|          0.3629901|
-|Remi Garde      | 0.1000000|          0.1781683|
+|Managers        | Average| Eb Winning Average|
+|:---------------|-------:|------------------:|
+|Eddie Howe      |   0.298|              0.299|
+|Brue Rioch      |   0.447|              0.412|
+|Arsene Wenger   |   0.575|              0.571|
+|Stewart Houston |   0.368|              0.343|
+|David O'Leary   |   0.431|              0.427|
+|Jim Barron      |   1.000|              0.356|
+|Tim Sherwood    |   0.422|              0.397|
+|Graham Taylor   |   0.236|              0.244|
+|Brian Little    |   0.368|              0.363|
+|Remi Garde      |   0.100|              0.178|
 {{< /panel >}}
 {{< /panelset >}}
 
@@ -343,23 +344,23 @@ epl%>%
 ### Results
 
 So, who are the best managers by this estimate?
-Drum roll, please...... I present the top ten managers!!!!!! Pep Josep Guadiola tops the pack with a winning average of 0.665 (66.5%). Very impressive for a guy who has only spent two seasons in the league based on this data. Alex Ferguson is second with a winning average of 0.647 (64.7%). Seems the Prof (Arsene Wenger) comes in at number 8 with a winning average of 0.571 (57.10%). 
+Drum roll, please...... I present the top ten managers!!!!!! *Pep Josep Guadiola* tops the pack with a winning average of *0.665 (66.5%)*. Very impressive for a guy who has only spent two seasons in the league based on this data. *Alex Ferguson* is second with a winning average of *0.647 (64.7%)*. Seems the *Prof (Arsene Wenger)* comes in at number 8 with a winning average of *0.571 (57.10%).* 
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Top 10 Managers Using Empirical Bayes" >}}
 
-|Managers          | Total Games Managed| Games Won|   Average| Eb Winning Average|
-|:-----------------|-------------------:|---------:|---------:|------------------:|
-|Josep Guardiola   |                  76|        55| 0.7236842|          0.6648191|
-|Alex Ferguson     |                 810|       528| 0.6518519|          0.6466076|
-|Jose Mourinho     |                 288|       183| 0.6354167|          0.6217385|
-|Antonio Conte     |                  76|        51| 0.6710526|          0.6195730|
-|Roberto Mancini   |                 133|        82| 0.6165414|          0.5898928|
-|Carlo Ancelotti   |                  76|        48| 0.6315789|          0.5856385|
-|Manuel Pellegrini |                 114|        70| 0.6140351|          0.5836270|
-|Arsene Wenger     |                 828|       476| 0.5748792|          0.5708835|
-|Rafael Benitez    |                 302|       156| 0.5165563|          0.5081770|
-|Jurgen Klopp      |                 106|        56| 0.5283019|          0.5048216|
+|Managers          | Total Games Managed| Games Won| Average| Eb Winning Average|
+|:-----------------|-------------------:|---------:|-------:|------------------:|
+|Josep Guardiola   |                  76|        55|   0.724|              0.665|
+|Alex Ferguson     |                 810|       528|   0.652|              0.647|
+|Jose Mourinho     |                 288|       183|   0.635|              0.622|
+|Antonio Conte     |                  76|        51|   0.671|              0.620|
+|Roberto Mancini   |                 133|        82|   0.617|              0.590|
+|Carlo Ancelotti   |                  76|        48|   0.632|              0.586|
+|Manuel Pellegrini |                 114|        70|   0.614|              0.584|
+|Arsene Wenger     |                 828|       476|   0.575|              0.571|
+|Rafael Benitez    |                 302|       156|   0.517|              0.508|
+|Jurgen Klopp      |                 106|        56|   0.528|              0.505|
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -374,40 +375,40 @@ knitr::kable(epl_man2, col.names = str_to_title(str_replace_all(names(epl_man2),
 
 
 
-|Managers          | Total Games Managed| Games Won|   Average| Eb Winning Average|
-|:-----------------|-------------------:|---------:|---------:|------------------:|
-|Josep Guardiola   |                  76|        55| 0.7236842|          0.6648191|
-|Alex Ferguson     |                 810|       528| 0.6518519|          0.6466076|
-|Jose Mourinho     |                 288|       183| 0.6354167|          0.6217385|
-|Antonio Conte     |                  76|        51| 0.6710526|          0.6195730|
-|Roberto Mancini   |                 133|        82| 0.6165414|          0.5898928|
-|Carlo Ancelotti   |                  76|        48| 0.6315789|          0.5856385|
-|Manuel Pellegrini |                 114|        70| 0.6140351|          0.5836270|
-|Arsene Wenger     |                 828|       476| 0.5748792|          0.5708835|
-|Rafael Benitez    |                 302|       156| 0.5165563|          0.5081770|
-|Jurgen Klopp      |                 106|        56| 0.5283019|          0.5048216|
+|Managers          | Total Games Managed| Games Won| Average| Eb Winning Average|
+|:-----------------|-------------------:|---------:|-------:|------------------:|
+|Josep Guardiola   |                  76|        55|   0.724|              0.665|
+|Alex Ferguson     |                 810|       528|   0.652|              0.647|
+|Jose Mourinho     |                 288|       183|   0.635|              0.622|
+|Antonio Conte     |                  76|        51|   0.671|              0.620|
+|Roberto Mancini   |                 133|        82|   0.617|              0.590|
+|Carlo Ancelotti   |                  76|        48|   0.632|              0.586|
+|Manuel Pellegrini |                 114|        70|   0.614|              0.584|
+|Arsene Wenger     |                 828|       476|   0.575|              0.571|
+|Rafael Benitez    |                 302|       156|   0.517|              0.508|
+|Jurgen Klopp      |                 106|        56|   0.528|              0.505|
 {{< /panel >}}
 {{< /panelset >}}
 
 
-Onto the bottom ten managers in the premier league from our estimates, Terry Connor had the lest winning average of 0.1504 (15.04%). As we can see empirical Bayes estimation didn't select managers who managed one or two games unlike the raw winning average.
+Onto the bottom ten managers in the premier league from our estimates, *Terry Connor* had the lest winning average of *0.1504 (15.04%).* As we can see empirical Bayes estimation didn't select managers who managed one or two games unlike the raw winning average.
 
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Bottom 10 Managers Using Empirical Bayes" >}}
 
-|Managers        | Total Games Managed| Games Won|   Average| Eb Winning Average|
-|:---------------|-------------------:|---------:|---------:|------------------:|
-|Terry Connor    |                  13|         0| 0.0000000|          0.1485360|
-|John Gorman     |                  42|         5| 0.1190476|          0.1612637|
-|Roy McFarland   |                  22|         2| 0.0909091|          0.1678114|
-|Steve Wigley    |                  16|         1| 0.0625000|          0.1680531|
-|Aidy Boothroyd  |                  38|         5| 0.1315789|          0.1740610|
-|Eric Black      |                   9|         0| 0.0000000|          0.1762927|
-|Remi Garde      |                  20|         2| 0.1000000|          0.1781683|
-|Billy Davies    |                  14|         1| 0.0714286|          0.1807818|
-|Mark McGhee     |                  24|         3| 0.1250000|          0.1860608|
-|Chris Hutchings |                  24|         3| 0.1250000|          0.1860608|
+|Managers        | Total Games Managed| Games Won| Average| Eb Winning Average|
+|:---------------|-------------------:|---------:|-------:|------------------:|
+|Terry Connor    |                  13|         0|   0.000|              0.149|
+|John Gorman     |                  42|         5|   0.119|              0.161|
+|Roy McFarland   |                  22|         2|   0.091|              0.168|
+|Steve Wigley    |                  16|         1|   0.062|              0.168|
+|Aidy Boothroyd  |                  38|         5|   0.132|              0.174|
+|Eric Black      |                   9|         0|   0.000|              0.176|
+|Remi Garde      |                  20|         2|   0.100|              0.178|
+|Billy Davies    |                  14|         1|   0.071|              0.181|
+|Mark McGhee     |                  24|         3|   0.125|              0.186|
+|Chris Hutchings |                  24|         3|   0.125|              0.186|
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -416,24 +417,24 @@ Onto the bottom ten managers in the premier league from our estimates, Terry Con
 
 ## Step 3: Posterior Distribution
 
-We have our posterior winning average, we can determine the shape parameters of the posterior probability distribution for each manager. This is easily done by updating the shape parameters of the prior beta distribution. This is shown in the R code.
+We have our posterior winning average, we can determine the shape parameters of the posterior probability distribution for each manager. This is easily done by updating the shape parameters of the prior beta distribution. 
 
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Posterior Distribution" >}}
 
-|Managers        |     Alpha2|      Beta2|
-|:---------------|----------:|----------:|
-|Eddie Howe      |  37.773622|  88.631809|
-|Brue Rioch      |  20.773622|  29.631809|
-|Arsene Wenger   | 479.773622| 360.631809|
-|Stewart Houston |  10.773622|  20.631809|
-|David O'Leary   | 151.773622| 203.631809|
-|Jim Barron      |   4.773622|   8.631809|
-|Tim Sherwood    |  22.773622|  34.631809|
-|Graham Taylor   |  24.773622|  76.631809|
-|Brian Little    |  56.773622|  99.631809|
-|Remi Garde      |   5.773622|  26.631809|
+|Managers        | Alpha2|  Beta2|
+|:---------------|------:|------:|
+|Eddie Howe      |  37.77|  88.63|
+|Brue Rioch      |  20.77|  29.63|
+|Arsene Wenger   | 479.77| 360.63|
+|Stewart Houston |  10.77|  20.63|
+|David O'Leary   | 151.77| 203.63|
+|Jim Barron      |   4.77|   8.63|
+|Tim Sherwood    |  22.77|  34.63|
+|Graham Taylor   |  24.77|  76.63|
+|Brian Little    |  56.77|  99.63|
+|Remi Garde      |   5.77|  26.63|
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -452,18 +453,18 @@ knitr::kable(col.names = str_to_title(names(.)))
 
 
 
-|Managers        |     Alpha2|      Beta2|
-|:---------------|----------:|----------:|
-|Eddie Howe      |  37.773622|  88.631809|
-|Brue Rioch      |  20.773622|  29.631809|
-|Arsene Wenger   | 479.773622| 360.631809|
-|Stewart Houston |  10.773622|  20.631809|
-|David O'Leary   | 151.773622| 203.631809|
-|Jim Barron      |   4.773622|   8.631809|
-|Tim Sherwood    |  22.773622|  34.631809|
-|Graham Taylor   |  24.773622|  76.631809|
-|Brian Little    |  56.773622|  99.631809|
-|Remi Garde      |   5.773622|  26.631809|
+|Managers        | Alpha2|  Beta2|
+|:---------------|------:|------:|
+|Eddie Howe      |  37.77|  88.63|
+|Brue Rioch      |  20.77|  29.63|
+|Arsene Wenger   | 479.77| 360.63|
+|Stewart Houston |  10.77|  20.63|
+|David O'Leary   | 151.77| 203.63|
+|Jim Barron      |   4.77|   8.63|
+|Tim Sherwood    |  22.77|  34.63|
+|Graham Taylor   |  24.77|  76.63|
+|Brian Little    |  56.77|  99.63|
+|Remi Garde      |   5.77|  26.63|
 {{< /panel >}}
 {{< /panelset >}}
 
@@ -472,16 +473,7 @@ Now that we have the `$$\alpha$$` and `$$\beta$$` for each manager we can now vi
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Posterior Distribution of Top 5 Managers" >}}
-
-```
-## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## i Please use `linewidth` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.
-```
-
-<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/pd_top-1.png" width="2400" />
+<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/pd_top-1.png" width="2880" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -497,8 +489,8 @@ epl_man4 <- epl %>%
 epl_man4%>%  
   ggplot(aes(x, density, colour = managers)) + 
   geom_line(linewidth = 1.8) +
-  stat_function(fun=function(x) dbeta(x, alpha, beta), lty = 2, colour = "grey35", size = 2) + 
-  scale_colour_scico_d(palette = "lajolla") +
+  stat_function(fun=function(x) dbeta(x, alpha, beta), lty = 2, colour = "grey35", linewidth = 2) + 
+  scale_colour_scico_d(palette = "bam") +
   labs(x = "Winning Averages", 
        y = "Density", 
        title="Prior and Posterior Distribution", 
@@ -544,8 +536,8 @@ manager <- manager_career %>%
 manager%>%
   ggplot(aes(x, density, colour = managers)) + 
   geom_line(linewidth = 1.8) + 
-  stat_function(fun=function(x) dbeta(x, alpha, beta), lty =2, colour="grey35", size = 2) +  
-  scale_colour_scico_d(palette = "lajolla") +
+  stat_function(fun=function(x) dbeta(x, alpha, beta), lty =2, colour="grey35", linewidth = 2) +  
+  scale_colour_scico_d(palette = "bam") +
   labs(x ="Winning Averages", 
        y = "Density", 
        title = "Prior and Posterior Distribution", 
@@ -607,12 +599,6 @@ The estimates are only different for managers who over saw fewer games (less tha
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Managers Who Oversaw Less Than Two Games" >}}
-
-```
-## Warning: ggrepel: 17 unlabeled data points (too many overlaps). Consider
-## increasing max.overlaps
-```
-
 <img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/less_two-1.png" width="2880" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
@@ -639,11 +625,6 @@ epl%>%
         legend.key.size  = unit(3, "cm"),
         legend.text = element_text(size = 30))
 ```
-
-```
-## Warning: ggrepel: 21 unlabeled data points (too many overlaps). Consider
-## increasing max.overlaps
-```
 {{< /panel >}}
 {{< /panelset >}}
 
@@ -661,18 +642,18 @@ Credible interval tells what percentage (for this example 95%) of the the poster
 
 Table: Table 1: Credible Interval
 
-|Managers          | Games Won| Total Games Managed| Eb Winning Average|       Low|      High|
-|:-----------------|---------:|-------------------:|------------------:|---------:|---------:|
-|Josep Guardiola   |        55|                  76|          0.6648191| 0.6316136| 0.7588512|
-|Alex Ferguson     |       528|                 810|          0.6466076| 0.6354285| 0.6789108|
-|Jose Mourinho     |       183|                 288|          0.6217385| 0.6030078| 0.6756766|
-|Antonio Conte     |        51|                  76|          0.6195730| 0.5852000| 0.7173755|
-|Roberto Mancini   |        82|                 133|          0.5898928| 0.5625841| 0.6682698|
-|Carlo Ancelotti   |        48|                  76|          0.5856385| 0.5506062| 0.6856520|
-|Manuel Pellegrini |        70|                 114|          0.5836270| 0.5542667| 0.6678195|
-|Arsene Wenger     |       476|                 828|          0.5708835| 0.5593968| 0.6041582|
-|Rafael Benitez    |       156|                 302|          0.5081770| 0.4891613| 0.5632634|
-|Jurgen Klopp      |        56|                 106|          0.5048216| 0.4738096| 0.5942600|
+|Managers          | Games Won| Total Games Managed| Eb Winning Average|   Low|  High|
+|:-----------------|---------:|-------------------:|------------------:|-----:|-----:|
+|Josep Guardiola   |        55|                  76|              0.665| 0.632| 0.759|
+|Alex Ferguson     |       528|                 810|              0.647| 0.635| 0.679|
+|Jose Mourinho     |       183|                 288|              0.622| 0.603| 0.676|
+|Antonio Conte     |        51|                  76|              0.620| 0.585| 0.717|
+|Roberto Mancini   |        82|                 133|              0.590| 0.563| 0.668|
+|Carlo Ancelotti   |        48|                  76|              0.586| 0.551| 0.686|
+|Manuel Pellegrini |        70|                 114|              0.584| 0.554| 0.668|
+|Arsene Wenger     |       476|                 828|              0.571| 0.559| 0.604|
+|Rafael Benitez    |       156|                 302|              0.508| 0.489| 0.563|
+|Jurgen Klopp      |        56|                 106|              0.505| 0.474| 0.594|
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -690,18 +671,18 @@ knitr::kable(credible_interval, caption = "Credible Interval", col.names = str_t
 
 Table: Table 2: Credible Interval
 
-|Managers          | Games Won| Total Games Managed| Eb Winning Average|       Low|      High|
-|:-----------------|---------:|-------------------:|------------------:|---------:|---------:|
-|Josep Guardiola   |        55|                  76|          0.6648191| 0.6316136| 0.7588512|
-|Alex Ferguson     |       528|                 810|          0.6466076| 0.6354285| 0.6789108|
-|Jose Mourinho     |       183|                 288|          0.6217385| 0.6030078| 0.6756766|
-|Antonio Conte     |        51|                  76|          0.6195730| 0.5852000| 0.7173755|
-|Roberto Mancini   |        82|                 133|          0.5898928| 0.5625841| 0.6682698|
-|Carlo Ancelotti   |        48|                  76|          0.5856385| 0.5506062| 0.6856520|
-|Manuel Pellegrini |        70|                 114|          0.5836270| 0.5542667| 0.6678195|
-|Arsene Wenger     |       476|                 828|          0.5708835| 0.5593968| 0.6041582|
-|Rafael Benitez    |       156|                 302|          0.5081770| 0.4891613| 0.5632634|
-|Jurgen Klopp      |        56|                 106|          0.5048216| 0.4738096| 0.5942600|
+|Managers          | Games Won| Total Games Managed| Eb Winning Average|   Low|  High|
+|:-----------------|---------:|-------------------:|------------------:|-----:|-----:|
+|Josep Guardiola   |        55|                  76|              0.665| 0.632| 0.759|
+|Alex Ferguson     |       528|                 810|              0.647| 0.635| 0.679|
+|Jose Mourinho     |       183|                 288|              0.622| 0.603| 0.676|
+|Antonio Conte     |        51|                  76|              0.620| 0.585| 0.717|
+|Roberto Mancini   |        82|                 133|              0.590| 0.563| 0.668|
+|Carlo Ancelotti   |        48|                  76|              0.586| 0.551| 0.686|
+|Manuel Pellegrini |        70|                 114|              0.584| 0.554| 0.668|
+|Arsene Wenger     |       476|                 828|              0.571| 0.559| 0.604|
+|Rafael Benitez    |       156|                 302|              0.508| 0.489| 0.563|
+|Jurgen Klopp      |        56|                 106|              0.505| 0.474| 0.594|
 {{< /panel >}}
 {{< /panelset >}}
 

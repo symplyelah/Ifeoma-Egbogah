@@ -9,6 +9,13 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r, echo = FALSE}
+
+library(knitr)
+opts_chunk$set(cache = TRUE, warning = FALSE, message = FALSE)
+options(digits = 3)
+
+```
 
 ## Introduction
 
@@ -137,7 +144,7 @@ epl%>%
   #pivot_longer(cols = starts_with("game"), names_to = "outcome", values_to = "games")%>%
   mutate(average = games_won/total_games_managed)%>%
   ggplot(aes(average)) + 
-  geom_histogram(binwidth = 0.1, fill="darkorchid4") + 
+  geom_histogram(binwidth = 0.1, fill="pink") + 
   labs(x = "Winning Averages",
        y = "Counts",
        title = "Distribution of EPL Managers' Winning Average from 1992 to 2018") +
@@ -216,8 +223,8 @@ Hmmmm..... Not bad! So we have our shape parameters for the beta distribution. H
 
 epl_man%>%
   ggplot() + 
-  geom_histogram(aes(average, y = after_stat(density)), binwidth=0.1, fill = "darkorchid4") + 
-  stat_function(fun = function(x) dbeta(x, alpha, beta), colour="red", linewidth = 0.6) + 
+  geom_histogram(aes(average, y = after_stat(density)), binwidth=0.1, fill = "pink") + 
+  stat_function(fun = function(x) dbeta(x, alpha, beta), colour="grey35", linewidth = 0.6) + 
   labs(x = "Winning Averages",
   y = "Density",
   title = "Prior Distribution Using Maximum Likelihood Estimation") +
@@ -273,7 +280,7 @@ epl%>%
 ### Results
 
 So, who are the best managers by this estimate?
-Drum roll, please...... I present the top ten managers!!!!!! Pep Josep Guadiola tops the pack with a winning average of 0.665 (66.5%). Very impressive for a guy who has only spent two seasons in the league based on this data. Alex Ferguson is second with a winning average of 0.647 (64.7%). Seems the Prof (Arsene Wenger) comes in at number 8 with a winning average of 0.571 (57.10%). 
+Drum roll, please...... I present the top ten managers!!!!!! *Pep Josep Guadiola* tops the pack with a winning average of *0.665 (66.5%)*. Very impressive for a guy who has only spent two seasons in the league based on this data. *Alex Ferguson* is second with a winning average of *0.647 (64.7%)*. Seems the *Prof (Arsene Wenger)* comes in at number 8 with a winning average of *0.571 (57.10%).* 
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Top 10 Managers Using Empirical Bayes" >}}
@@ -296,7 +303,7 @@ knitr::kable(epl_man2, col.names = str_to_title(str_replace_all(names(epl_man2),
 {{< /panelset >}}
 
 
-Onto the bottom ten managers in the premier league from our estimates, Terry Connor had the lest winning average of 0.1504 (15.04%). As we can see empirical Bayes estimation didn't select managers who managed one or two games unlike the raw winning average.
+Onto the bottom ten managers in the premier league from our estimates, *Terry Connor* had the lest winning average of *0.1504 (15.04%).* As we can see empirical Bayes estimation didn't select managers who managed one or two games unlike the raw winning average.
 
 
 {{< panelset class = "greetings" >}}
@@ -321,7 +328,7 @@ knitr::kable(epl_man3,  col.names = str_to_title(str_replace_all(names(epl_man3)
 
 ## Step 3: Posterior Distribution
 
-We have our posterior winning average, we can determine the shape parameters of the posterior probability distribution for each manager. This is easily done by updating the shape parameters of the prior beta distribution. This is shown in the R code.
+We have our posterior winning average, we can determine the shape parameters of the posterior probability distribution for each manager. This is easily done by updating the shape parameters of the prior beta distribution. 
 
 
 {{< panelset class = "greetings" >}}
@@ -367,8 +374,8 @@ epl_man4 <- epl %>%
 epl_man4%>%  
   ggplot(aes(x, density, colour = managers)) + 
   geom_line(linewidth = 1.8) +
-  stat_function(fun=function(x) dbeta(x, alpha, beta), lty = 2, colour = "grey35", size = 2) + 
-  scale_colour_scico_d(palette = "lajolla") +
+  stat_function(fun=function(x) dbeta(x, alpha, beta), lty = 2, colour = "grey35", linewidth = 2) + 
+  scale_colour_scico_d(palette = "bam") +
   labs(x = "Winning Averages", 
        y = "Density", 
        title="Prior and Posterior Distribution", 
@@ -419,8 +426,8 @@ manager <- manager_career %>%
 manager%>%
   ggplot(aes(x, density, colour = managers)) + 
   geom_line(linewidth = 1.8) + 
-  stat_function(fun=function(x) dbeta(x, alpha, beta), lty =2, colour="grey35", size = 2) +  
-  scale_colour_scico_d(palette = "lajolla") +
+  stat_function(fun=function(x) dbeta(x, alpha, beta), lty =2, colour="grey35", linewidth = 2) +  
+  scale_colour_scico_d(palette = "bam") +
   labs(x ="Winning Averages", 
        y = "Density", 
        title = "Prior and Posterior Distribution", 
