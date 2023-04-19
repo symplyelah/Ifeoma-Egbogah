@@ -284,6 +284,7 @@ epl_man%>%
   labs(x = "Winning Averages",
   y = "Density",
   title = "Prior Distribution Using Maximum Likelihood Estimation") +
+  theme_light() +
   theme(plot.title = element_text(hjust = 0.5, size = 45),
         axis.title = element_text(size = 30),
         axis.text = element_text(size = 30))
