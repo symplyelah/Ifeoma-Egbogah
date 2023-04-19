@@ -731,3 +731,8 @@ epl_man5%>%
 ```
 {{< /panel >}}
 {{< /panelset >}}
+
+## Appendix
+During our analysis, we made several assumptions. Firstly, we assumed that all the winning averages originated from a single distribution, and secondly, we assumed that each manager managed the same team since their league debut. However, in reality, except for Alex Ferguson and Arsene Wenger who have managed only one club since their debut in the league, other managers have managed several clubs over the years, resulting in changes to their winning averages over time depending on the club they managed.
+
+We could estimate separate beta priors for each team managed as well as for every five years.
