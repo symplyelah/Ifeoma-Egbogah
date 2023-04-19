@@ -154,13 +154,13 @@ To start, we will analyze the raw winning averages of the managers by observing 
 ```r
 epl%>%
   dplyr::select(managers, total_games_managed, games_won, games_drawn, games_lost)%>%
-  #pivot_longer(cols = starts_with("game"), names_to = "outcome", values_to = "games")%>%
   mutate(average = games_won/total_games_managed)%>%
   ggplot(aes(average)) + 
   geom_histogram(binwidth = 0.1, fill="pink") + 
   labs(x = "Winning Averages",
        y = "Counts",
        title = "Distribution of EPL Managers' Winning Average from 1992 to 2018") +
+  theme_light() +
   theme(plot.title = element_text(hjust = 0.5, size = 45),
         axis.title = element_text(size = 30),
         axis.text = element_text(size = 30))
@@ -415,9 +415,10 @@ epl %>%
   labs(x = "Empirical Bayes Average", 
        y = "Managers",
        title = "Top 10 Managers Using Empirical Bayes from 1992 to 2018") +
+  theme_light() +
   theme(plot.title = element_text(hjust = 0.5, size = 50),
         axis.title = element_text(size = 30),
-        axis.text = element_text(size = 30))
+        axis.text = element_text(size = 30)) 
 ```
 
 {{< /panel >}}
@@ -464,6 +465,7 @@ epl %>%
   labs(x = "Empirical Bayes Average", 
        y = "Managers",
        title = "Bottom 10 Managers Using Empirical Bayes from 1992 to 2018") +
+  theme_light() +
   theme(plot.title = element_text(hjust = 0.5, size = 50),
         axis.title = element_text(size = 30),
         axis.text = element_text(size = 30))
