@@ -7,7 +7,7 @@ headline: |
 ---
 
 <!-- this is a subheadline -->
-I am an epidemiologist by training, a Nigerian food exporter and an independent data visualization storyteller with skills in statistical analysis and data visualization. 
+I am an epidemiologist by training, a Nigerian food exporter and a data visualization storyteller with skills in statistical analysis and data visualization. 
 
 I am always improving my skills in design  by contributing to challenges such as [TidyTuesday](https://github.com/symplyelah/Tidytuesday) and self-led personal projects.
 
