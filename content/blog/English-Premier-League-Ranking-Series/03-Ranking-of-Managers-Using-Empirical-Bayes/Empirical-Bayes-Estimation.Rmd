@@ -650,7 +650,7 @@ epl_man5%>%
   geom_errorbarh(aes(xmin= low, xmax= high), show.legend = FALSE, linewidth = 1.5) +
   geom_point(show.legend = FALSE, size = 10) + 
   geom_vline(xintercept = alpha/(alpha + beta), colour="grey50", lty=2, linewidth = 1.5)  +
-  scale_colour_scico_d(palette = "lajolla", direction = -1) +
+  scale_colour_scico_d(palette = "bam", direction = -1) +
   labs(x = "Empirical Bayes Winning Averages with 95% Credible Interval",
        y = "Managers",
        title = "Empirical Bayes Winning Averages and Credible Interval\nfor the Top 20 Managers",
