@@ -316,8 +316,8 @@ epl %>%
   head(10)%>%
   mutate(managers = fct_reorder(managers, eb_winning_average))%>%
   ggplot(aes(eb_winning_average, managers, colour = managers)) +
-  geom_point(show.legend = FALSE) +
-  geom_segment(aes(xend = 0, yend = managers), show.legend = FALSE) +
+  geom_point(show.legend = FALSE, size = 10) +
+  geom_segment(aes(xend = 0, yend = managers), linewidth = 1.5, show.legend = FALSE) +
   scale_color_scico_d(palette = "bam") +
   labs(x = "Empirical Bayes Average", 
        y = "Managers",
@@ -368,8 +368,8 @@ epl %>%
   head(10)%>%
   mutate(managers = fct_reorder(managers, eb_winning_average))%>%
   ggplot(aes(eb_winning_average, managers, colour = managers)) +
-  geom_point(show.legend = FALSE) +
-  geom_segment(aes(xend = 0, yend = managers), show.legend = FALSE) +
+  geom_point(show.legend = FALSE, size = 10) +
+  geom_segment(aes(xend = 0, yend = managers), linewidth = 1.5, show.legend = FALSE) +
   scale_color_scico_d(palette = "bam") +
   labs(x = "Empirical Bayes Average", 
        y = "Managers",

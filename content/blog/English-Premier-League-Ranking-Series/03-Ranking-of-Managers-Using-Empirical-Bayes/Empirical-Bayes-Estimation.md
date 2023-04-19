@@ -2,7 +2,7 @@
 title: "English Premier League Managers"
 weight: 3
 subtitle: "The Best and Worst EPL Managers Using Emprirical Bayes"
-excerpt: " "
+excerpt: "Who do you think are the best and worst managers in the English Premier League? We are get to find out using empirical Bayes "
 date: 2023-04-17
 draft: false
 editor_options: 
@@ -28,16 +28,16 @@ Let's load our data set (data used in the Data-Exploration blog post (https://if
 
 ## Raw Winning Average
 
-A manager's performance is judged primarily on the outcome of the matches he is in charge of. A match's outcome could be a win, draw or a loss. If a win seems out of reach, a manager would prefer a draw than a loss. At least his team would gain a point as against zero if they lose. A win gives the team three points.
+The primary measure of a manager's performance is the outcome of the matches under their charge, which can result in a win, draw, or loss. When victory appears unlikely, managers tend to prefer a draw over a loss, as the team would earn a point instead of none. Winning a match rewards the team with three points.
 
-SO, who are the best and worst managers? Let's find out.....
+So, who are the best and worst managers? Let's find out.....
 
          Raw Winning Average = Games Won/Total Games Managed
 
 
 
 
-Here are the top ten managers with the highest raw winning average.
+These are the ten managers with the highest raw winning average.
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Top 10 Managers based on Raw Winning Average" >}}
@@ -85,7 +85,7 @@ knitr::kable(rwa_top, col.names = str_to_title(str_replace_all(names(rwa_top), "
 {{< /panel >}}
 {{< /panelset >}}
 
-.....and these are the bottom ten managers with lowest raw winning average. 
+.....and these are the ten managers with lowest raw winning average. 
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Bottom 10 Managers Based on Raw Winning AVerages" >}}
@@ -133,8 +133,9 @@ knitr::kable(rwa_bottom, col.names = str_to_title(str_replace_all(names(rwa_bott
 {{< /panel >}}
 {{< /panelset >}}
 
-Wow! Isn't that interesting. Looking at the table we know these are neither the best nor worst managers in the league. The raw winning averages definitely isn't a good estimate for determining who the best and worst managers are in the league. This estimate gives us managers who took charge of a singe game and were 'lucky' or 'unlucky' to win or lose the match. The overall mean raw winning average is 0.282.
+Wow, isn't this interesting. Observing the table, we can conclude that these managers are neither the best nor the worst in the league. The raw winning averages are therefore not a reliable indicator for identifying the best and worst managers in the league. This measure only takes into account managers who have led a single game and happened to be either 'lucky' or 'unlucky' in winning or losing the match. 
 
+The average raw winning percentage across all managers is 0.282.
 
 
 
@@ -142,8 +143,7 @@ We definitely need a better estimate. *Let's get it.*
 
 ## Distribution of the Raw Winning Average
 
-We will begin by looking at the distribution of the raw winning averages of the managers. Examining a distribution is usually done using by plotting a histogram. Based on the graph the beta distribution looks like is a good choice for our prior distribution and also our data is binomial.
-
+To start, we will analyze the raw winning averages of the managers by observing their distribution, typically accomplished by creating a histogram. After reviewing the histogram, we can conclude that the beta distribution is a suitable option for both our prior distribution and our binomial data.
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Raw Winning Average Distribution of Managers" >}}
@@ -168,22 +168,29 @@ epl%>%
 {{< /panel >}}
 {{< /panelset >}}
 
-## Bayesian Inference
+## What is Bayesian Inference?
 
-Bayesian inference is basically the reversal of ones belief on the basis of evidence. To use Bayesian method we need to choose a prior distribution (this is what we believe about the parameters before evidence) for the parameters we want to estimate. 
+Bayes typically refers to Thomas Bayes, an 18th-century British mathematician and theologian who developed Bayes' theorem, a fundamental concept in Bayesian inference. Bayes' theorem is a mathematical formula that describes the probability of an event based on prior knowledge or beliefs about the event and new evidence or data. Bayesian inference is a statistical approach that uses Bayes' theorem to update probabilities and make predictions based on new data or evidence
 
 ## Empirical Bayes
 
+Empirical Bayes is a statistical approach that combines frequentist and Bayesian methods to estimate the parameters of a statistical model. Empirical Bayes methods use a two-stage process to estimate parameters: first, they estimate the prior distribution of the parameters based on observed data, and then they use Bayesian methods to estimate the posterior distribution.
+
+The key idea behind empirical Bayes is to estimate the prior distribution of the parameters based on the same data that is used to estimate the parameters themselves. This approach is useful when there is not enough data to estimate the prior distribution independently, or when the prior distribution is too broad and uninformative. By using the observed data to estimate the prior distribution, the empirical Bayes approach can often provide more accurate parameter estimates than standard frequentist methods.
+
+Empirical Bayes methods have been widely used in many applications, including sports analytics, genomics, and economics. In sports analytics, empirical Bayes is used to estimate the performance of players based on their past performance and the performance of their opponents. In genomics, it is used to estimate the expression of genes based on DNA microarray data. In economics, it is used to estimate the impact of policies or programs on outcomes such as employment or income.
+
+
 ### Step 1: Prior Distribution
 
-The first step in Bayesian analysis is to choose a prior distribution. Since we are using empirical Bayes we will be taking our prior distribution from the data. Not a very Bayesian approach. I know, I know. Since I have a reasonable amount of data I decided to use empirical Bayes. This is what our model looks like: 
+The initial stage of Bayesian analysis involves selecting a prior distribution, which, in the case of empirical Bayes, is derived from the data. While this approach may not adhere strictly to Bayesian principles, I opted for it as I had a substantial amount of data available. Thus, our model takes the form of:
+
 
 `$$Y\sim\mbox{Binomial} (Total\ Games\ Managed,\ X)$$`
 
 `$$X\sim\mbox{Beta}(\alpha,\ \beta)$$`
 
-`$$\alpha$$` and `$$\beta$$` are called "hyper parameters" of our model. To get the hyper parameters `$$\alpha$$` and `$$\beta$$` for our model we will be using the method of moments. The maximum likelihood estimation can also be used. The method of moments uses the mean and the variance of the data. The formula for the method of moments is: 
-
+The "hyper parameters" of our model are denoted by `$$\alpha$$` and `$$\beta$$`. To determine these hyper parameters, we will employ the method of moments or maximum likelihood estimation. In this instance, we will be utilizing the method of moments, which involves calculating the mean and variance of the data. The formula for the method of moments is as follows:
 
 `$$\mu\ = mean(X)$$`
 `$$\sigma\ = var(X)$$`
@@ -260,7 +267,8 @@ beta
 {{< /panel >}}
 {{< /panelset >}}
 
-Hmmmm..... Not bad! So we have our shape parameters for the beta distribution. How does this fit to the distribution of the raw winning averages shown by the histogram? Let's plot and see.
+We can visualize the fit of the shape parameters for the beta distribution to the distribution of the raw winning averages shown in the histogram by plotting the distribution and examining its alignment 
+
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Prior Distribution" >}}
@@ -272,7 +280,7 @@ Hmmmm..... Not bad! So we have our shape parameters for the beta distribution. H
 epl_man%>%
   ggplot() + 
   geom_histogram(aes(average, y = after_stat(density)), binwidth=0.1, fill = "pink") + 
-  stat_function(fun = function(x) dbeta(x, alpha, beta), colour="grey35", linewidth = 0.6) + 
+  stat_function(fun = function(x) dbeta(x, alpha, beta), colour="grey35", linewidth = 0.8) + 
   labs(x = "Winning Averages",
   y = "Density",
   title = "Prior Distribution Using Maximum Likelihood Estimation") +
@@ -286,7 +294,7 @@ epl_man%>%
 Not perfect but not to bad. Next stop empirical Bayes estimate, then posterior probability and finally credible interval.
 
 
-### Step 2: Using the Distribution as a Prior for Each Manager's Winning Average 
+### Step 2: Applying the Beta Distribution as a Prior for the Winning Average of Each Manager.
 
 Since we have our prior probability distribution we can now calculate our posterior winning average for each manager by updating based on individual evidence. We do this by:
   
@@ -343,8 +351,7 @@ epl%>%
 
 ### Results
 
-So, who are the best managers by this estimate?
-Drum roll, please...... I present the top ten managers!!!!!! *Pep Josep Guadiola* tops the pack with a winning average of *0.665 (66.5%)*. Very impressive for a guy who has only spent two seasons in the league based on this data. *Alex Ferguson* is second with a winning average of *0.647 (64.7%)*. Seems the *Prof (Arsene Wenger)* comes in at number 8 with a winning average of *0.571 (57.10%).* 
+According to this estimate, the top ten managers are in! Drum roll, please. And the winner is *Pep Josep Guadiola* with a remarkable winning average of *0.665 (66.5%)*, even though he has only spent two seasons in the league based on this data. Coming in at a close second is *Alex Ferguson* with a winning average of *0.647 (64.7%)*. Another notable mention goes to the *Prof (Arsene Wenger)*, who secures the number 8 spot with a winning average of *0.571 (57.10%)*.
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Top 10 Managers Using Empirical Bayes" >}}
@@ -387,11 +394,37 @@ knitr::kable(epl_man2, col.names = str_to_title(str_replace_all(names(epl_man2),
 |Arsene Wenger     |                 828|       476|   0.575|              0.571|
 |Rafael Benitez    |                 302|       156|   0.517|              0.508|
 |Jurgen Klopp      |                 106|        56|   0.528|              0.505|
+
+{{< /panel >}}
+{{< panel name = "Lollipop Plot of Top 10 Managers Using Empirical Bayes" >}}
+<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/lollipop_plot-1.png" width="2880" />
+
+{{< /panel >}}
+{{< panel name = "Code" >}}
+
+```r
+epl %>%
+  arrange(desc(eb_winning_average)) %>%
+  dplyr::select(managers, total_games_managed, games_won, average, eb_winning_average) %>%
+  head(10)%>%
+  mutate(managers = fct_reorder(managers, eb_winning_average))%>%
+  ggplot(aes(eb_winning_average, managers, colour = managers)) +
+  geom_point(show.legend = FALSE, size = 10) +
+  geom_segment(aes(xend = 0, yend = managers), linewidth = 1.5, show.legend = FALSE) +
+  scale_color_scico_d(palette = "bam") +
+  labs(x = "Empirical Bayes Average", 
+       y = "Managers",
+       title = "Top 10 Managers Using Empirical Bayes from 1992 to 2018") +
+  theme(plot.title = element_text(hjust = 0.5, size = 50),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 30))
+```
+
 {{< /panel >}}
 {{< /panelset >}}
 
 
-Onto the bottom ten managers in the premier league from our estimates, *Terry Connor* had the lest winning average of *0.1504 (15.04%).* As we can see empirical Bayes estimation didn't select managers who managed one or two games unlike the raw winning average.
+Let's move on to the bottom ten managers in the Premier League based on our estimates. According to the data, *Terry Connor* had the lowest winning average of *0.1504 (15.04%)*. Interestingly, we can observe that the empirical Bayes estimation did not include managers who only managed one or two games, unlike the raw winning average.
 
 
 {{< panelset class = "greetings" >}}
@@ -413,12 +446,34 @@ Onto the bottom ten managers in the premier league from our estimates, *Terry Co
 {{< panel name = "Code" >}}
 
 {{< /panel >}}
+{{< panel name = "Lollipop Plot of Bottom 10 Managers Using Empirical Bayes" >}}
+<img src="/blog/English-Premier-League-Ranking-Series/03-Ranking-of-Managers-Using-Empirical-Bayes/Empirical-Bayes-Estimation_files/figure-html/lollipop-1.png" width="2880" />
+{{< /panel >}}
+{{< panel name = "Code" >}}
+
+```r
+epl %>%
+  arrange(eb_winning_average) %>%
+  dplyr::select(managers, total_games_managed, games_won, average, eb_winning_average) %>%
+  head(10)%>%
+  mutate(managers = fct_reorder(managers, eb_winning_average))%>%
+  ggplot(aes(eb_winning_average, managers, colour = managers)) +
+  geom_point(show.legend = FALSE, size = 10) +
+  geom_segment(aes(xend = 0, yend = managers), linewidth = 1.5, show.legend = FALSE) +
+  scale_color_scico_d(palette = "bam") +
+  labs(x = "Empirical Bayes Average", 
+       y = "Managers",
+       title = "Bottom 10 Managers Using Empirical Bayes from 1992 to 2018") +
+  theme(plot.title = element_text(hjust = 0.5, size = 50),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 30))
+```
+{{< /panel >}}
 {{< /panelset >}}
 
-## Step 3: Posterior Distribution
+## Posterior Distribution
 
-We have our posterior winning average, we can determine the shape parameters of the posterior probability distribution for each manager. This is easily done by updating the shape parameters of the prior beta distribution. 
-
+Now that we have obtained our posterior winning average, it is possible to determine the shape parameters of the posterior probability distribution for each manager. Updating the shape parameters of the prior beta distribution can achieve this with ease.
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Posterior Distribution" >}}
@@ -756,7 +811,7 @@ epl_man5%>%
   geom_errorbarh(aes(xmin= low, xmax= high), show.legend = FALSE, linewidth = 1.5) +
   geom_point(show.legend = FALSE, size = 10) + 
   geom_vline(xintercept = alpha/(alpha + beta), colour="grey50", lty=2, linewidth = 1.5)  +
-  scale_colour_scico_d(palette = "lajolla", direction = -1) +
+  scale_colour_scico_d(palette = "bam", direction = -1) +
   labs(x = "Empirical Bayes Winning Averages with 95% Credible Interval",
        y = "Managers",
        title = "Empirical Bayes Winning Averages and Credible Interval\nfor the Top 20 Managers",
