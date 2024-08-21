@@ -79,10 +79,10 @@ ireland %>%
   geom_point(data = ireland %>% 
                filter(year == 2004), aes(2004, 60), size = 20, colour = "grey95") +
   geom_text(data = ireland %>% 
-               filter(year == 2004), aes(2004, 60, label = "No\nMedal"), nudge_y = 1.2)+ 
+               filter(year == 2004), aes(2004, 60, label = "No\nMedal"), nudge_y = 1.2) +
   geom_text(aes(label = paste0(medal_rank, rep("th", 6))), nudge_y = 4) +
   scale_y_reverse(limits = c(70, 1), breaks = c(70, 60, 50, 40, 30, 20, 10, 1)) +
-  scale_x_continuous(breaks = c(2000, 2004, 2008, 2012, 2016, 2020, 2024), labels = c("Sydney\n2000", "Athens\n2004", "Beijing\n2008", "London\n2012", "Rio de Janeiro\n2016", "Tokyo\n2020", "Paris\n2024"))+
+  scale_x_continuous(breaks = c(2000, 2004, 2008, 2012, 2016, 2020, 2024), labels = c("Sydney\n2000", "Athens\n2004", "Beijing\n2008", "London\n2012", "Rio de Janeiro\n2016", "Tokyo\n2020", "Paris\n2024")) +
   theme_light() +
   labs(x = "Year",
        y = "Medal Rank",
@@ -113,4 +113,4 @@ In other words, Ireland's journey from 64th in Sydney 2000 to 19th in Paris 2024
 When visualizing data, clarity is key, and sometimes, a small adjustment can make a big difference in how the story is told.
 
 
-
+[Data](https://www.kaggle.com/datasets/ramontanoeiro/summer-olympic-medals-1986-2020) source.
