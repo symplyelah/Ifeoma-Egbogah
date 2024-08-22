@@ -111,7 +111,8 @@ chart <- ireland %>%
        title = "Ireland's Olympic Success Story",
        caption = "Source: Kaggle, Viz: Ifeoma Egbogah") +
   theme(plot.caption = element_text(colour = "grey65", face = "italic"),
-        plot.title = element_text(hjust = 0.5, colour = "brown"))
+        plot.title = element_text(hjust = 0.5, colour = "brown"),
+        axis.text = element_text(colour = "brown"))
 ```
 {{< /panel >}}
 {{< /panelset >}}
