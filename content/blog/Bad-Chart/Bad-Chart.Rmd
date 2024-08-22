@@ -122,6 +122,7 @@ chart <- ireland %>%
 
 ```{r warning=FALSE}
 chart
+
 ```
 
 
