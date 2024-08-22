@@ -120,7 +120,7 @@ chart <- ireland %>%
 {{< panelset class = "greetings" >}}
 {{< panel name = "Better Chart" >}}
 
-```{r warning=FALSE, include=FALSE}
+```{r warning=FALSE}
 chart
 ```
 

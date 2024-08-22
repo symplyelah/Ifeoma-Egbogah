@@ -42,6 +42,11 @@ To make the chart more intuitive, the y-axis should either be inverted, so that 
 {{< panel name = "Better Chart" >}}
 
 
+```r
+chart
+```
+
+<img src="/blog/Bad-Chart/Bad-Chart_files/figure-html/unnamed-chunk-3-1.png" width="672" />
 
 
 {{< /panel >}}
