@@ -1,7 +1,10 @@
 ---
 title: "A Misleading Chart: Ireland’s Olympic Success Story"
 date: 2024-08-17
-layout: single-sidebar
+show_post_thumbnail: true
+show_author_byline: true
+# for listing page layout
+layout: list-sidebar
 draft: false
 categories:
 - visualization, blog
