@@ -42,11 +42,6 @@ To make the chart more intuitive, the y-axis should either be inverted, so that 
 {{< panel name = "Better Chart" >}}
 
 
-```r
-chart
-```
-
-<img src="/blog/Bad-Chart/Bad-Chart_files/figure-html/unnamed-chunk-3-1.png" width="672" />
 
 
 {{< /panel >}}
@@ -132,6 +127,5 @@ Regrettably, I discovered three additional issues while reviewing the data:
 In other words, Ireland's journey from 64th in Sydney 2000 to 19th in Paris 2024 is a success story, showing how the country has climbed the ranks over the years. 
 
 When visualizing data, clarity is key, and sometimes, a small adjustment can make a big difference in how the story is told.
-
 
 Data source [Kaggle](https://www.kaggle.com/datasets/ramontanoeiro/summer-olympic-medals-1986-2020) 
