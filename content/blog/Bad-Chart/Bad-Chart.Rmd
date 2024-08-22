@@ -146,4 +146,4 @@ In other words, Ireland's journey from 64th in Sydney 2000 to 19th in Paris 2024
 When visualizing data, clarity is key, and sometimes, a small adjustment can make a big difference in how the story is told.
 
 
-[Data](https://www.kaggle.com/datasets/ramontanoeiro/summer-olympic-medals-1986-2020) source.
+Data source [Kaggle](https://www.kaggle.com/datasets/ramontanoeiro/summer-olympic-medals-1986-2020) 
