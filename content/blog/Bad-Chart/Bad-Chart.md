@@ -9,8 +9,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-{{< here >}}
-
 The other day, I saw this [Twitter](https://x.com/EemerEivers/status/1822239148519890981) post: “This is a masterclass (yet again) in [IrishTimes](https://x.com/IrishTimes) on how NOT to present information,” Dublin-based research consultant Dr Eemer Eivers wrote. “Quick glance & you’d be sure 🇮🇪 has tumbled DOWN the medal tables since 2000. FFS. This is criminal level breaking of the rules of how to share data.”
 
 When we look at data, especially in charts, we expect it to be clear and intuitive. But sometimes, even well-meaning visuals can mislead us. Take a look at this chart showing Ireland’s position in the Olympic Medals Table from Sydney 2000 to Paris 2024.
@@ -34,71 +32,11 @@ The y-axis of this chart is plotted in a way that makes a higher ranking (which 
 
 To make the chart more intuitive, the y-axis should either be inverted, so that the best positions are at the top, or we could explain that a downward trend in this context is actually a positive sign of improvement.
 
+
+
+
 {{< panelset class = "greetings" >}}
 {{< panel name = "Better Chart" >}}
-
-```
-## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.3     ✔ readr     2.1.4
-## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-## ✔ ggplot2   3.5.0     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
-## ✔ purrr     1.0.2     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-## Rows: 1344 Columns: 8
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: ","
-## chr (4): Host_country, Host_city, Country_Name, Country_Code
-## dbl (4): Year, Gold, Silver, Bronze
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-```
-
-```
-## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## ℹ Please use `linewidth` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.
-```
-
-```
-## Warning: Removed 1 row containing missing values or values outside the scale range
-## (`geom_point()`).
-## Removed 1 row containing missing values or values outside the scale range
-## (`geom_point()`).
-```
-
-```
-## Warning: Removed 1 row containing missing values or values outside the scale range
-## (`geom_text()`).
-```
-
-<img src="/blog/Bad-Chart/Bad-Chart_files/figure-html/Ireland-1.png" width="672" />
-{{< /panel >}}
-{{< panel name = "Code" >}}
-
-```r
-library(tidyverse)
-
-olympic <- read_csv("summer_olympic_medals.csv") %>% 
-  janitor::clean_names() 
-```
-
-```
-## Rows: 1344 Columns: 8
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: ","
-## chr (4): Host_country, Host_city, Country_Name, Country_Code
-## dbl (4): Year, Gold, Silver, Bronze
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-```
 
 ```r
 olympic <- olympic %>% 
@@ -144,11 +82,11 @@ add_suffix <- function(x) {
   }
 }
 # Apply the function to label the points
-ireland %>%
+chart <- ireland %>%
   ggplot(aes(year, medal_rank)) +
   geom_point(size = 5.5, colour = "brown") +
   geom_line(data = ireland %>%
-              filter(year > 2004), aes(year, medal_rank), size = 1, colour = "brown") +
+              filter(year > 2004), aes(year, medal_rank), linewidth = 1, colour = "brown") +
   geom_point(size = 3, colour = "white") +
   geom_point(data = ireland %>%
                filter(year == 2004), aes(2004, 60), size = 20, colour = "grey95") +
@@ -165,16 +103,73 @@ ireland %>%
   theme(plot.caption = element_text(colour = "grey65", face = "italic"))
 ```
 
-```
-## Warning: Removed 1 row containing missing values or values outside the scale range
-## (`geom_point()`).
-## Removed 1 row containing missing values or values outside the scale range
-## (`geom_point()`).
-```
 
-```
-## Warning: Removed 1 row containing missing values or values outside the scale range
-## (`geom_text()`).
+{{< /panel >}}
+{{< panel name = "Code" >}}
+
+```r
+olympic <- olympic %>% 
+  group_by(year, country_name) %>% 
+  rowwise() %>% 
+  mutate(medals = sum(c_across(gold:bronze)))
+
+ireland <- olympic %>% 
+  group_by(year) %>% 
+  arrange(desc(gold), desc(silver), desc(bronze)) %>%
+  mutate(medal_rank = min_rank(-gold * 1e6 - silver * 1e3 - bronze)) %>%
+  filter(country_name == "Ireland" & year >= 2000) %>% 
+  unite("host", host_city, year, sep = " ", remove = FALSE) 
+
+ire_2024 <- tibble(host = c("Athens 2004", "Paris 2024"),
+                   year = c(2004, 2024),
+                   host_country = c("Greece", "France"),
+                   host_city = c("Athens", "Paris"),
+                   country_name = c("Ireland","Ireland"),
+                   country_code = c("IRL", "IRL"),
+                   gold = c(0, 4),
+                   silver = c(0, 0),
+                   bronze = c(0, 3),
+                   medals = c(0, 7),
+                   medal_rank = c(NA, 19))
+
+ireland <- bind_rows(ireland, ire_2024)
+
+# Custom function to add ordinal suffix
+add_suffix <- function(x) {
+  if (is.na(x)) {
+    return(NA)
+  } else if (x %% 100 >= 11 && x %% 100 <= 13) {
+    return(paste0(x, "th"))
+  } else if (x %% 10 == 1) {
+    return(paste0(x, "st"))
+  } else if (x %% 10 == 2) {
+    return(paste0(x, "nd"))
+  } else if (x %% 10 == 3) {
+    return(paste0(x, "rd"))
+  } else {
+    return(paste0(x, "th"))
+  }
+}
+# Apply the function to label the points
+chart <- ireland %>%
+  ggplot(aes(year, medal_rank)) +
+  geom_point(size = 5.5, colour = "brown") +
+  geom_line(data = ireland %>%
+              filter(year > 2004), aes(year, medal_rank), linewidth = 1, colour = "brown") +
+  geom_point(size = 3, colour = "white") +
+  geom_point(data = ireland %>%
+               filter(year == 2004), aes(2004, 60), size = 20, colour = "grey95") +
+  geom_text(data = ireland %>%
+               filter(year == 2004), aes(2004, 60, label = "No\nMedal"), nudge_y = 1.2) +
+  geom_text(aes(label = sapply(medal_rank, add_suffix)), nudge_y = 4) +
+  scale_y_reverse(limits = c(70, 1), breaks = c(70, 60, 50, 40, 30, 20, 10, 1)) +
+  scale_x_continuous(breaks = c(2000, 2004, 2008, 2012, 2016, 2020, 2024), labels = c("Sydney\n2000", "Athens\n2004", "Beijing\n2008", "London\n2012", "Rio de Janeiro\n2016", "Tokyo\n2020", "Paris\n2024")) +
+  theme_light() +
+  labs(x = "Year",
+       y = "Medal Rank",
+       title = "Ireland's Olympic Success Story",
+       caption = "Source: Kaggle\n Viz: Ifeoma Egbogah") +
+  theme(plot.caption = element_text(colour = "grey65", face = "italic"))
 ```
 {{< /panel >}}
 {{< /panelset >}}

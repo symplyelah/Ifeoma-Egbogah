@@ -33,15 +33,19 @@ The y-axis of this chart is plotted in a way that makes a higher ranking (which 
 
 To make the chart more intuitive, the y-axis should either be inverted, so that the best positions are at the top, or we could explain that a downward trend in this context is actually a positive sign of improvement.
 
-{{< panelset class = "greetings" >}}
-{{< panel name = "Better Chart" >}}
-```{r Ireland, echo=FALSE}
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 library(tidyverse)
 
 olympic <- read_csv("summer_olympic_medals.csv") %>% 
   janitor::clean_names() 
 
+```
+
+{{< panelset class = "greetings" >}}
+{{< panel name = "Better Chart" >}}
+```{r Ireland}
 olympic <- olympic %>% 
   group_by(year, country_name) %>% 
   rowwise() %>% 
@@ -85,11 +89,11 @@ add_suffix <- function(x) {
   }
 }
 # Apply the function to label the points
-ireland %>%
+chart <- ireland %>%
   ggplot(aes(year, medal_rank)) +
   geom_point(size = 5.5, colour = "brown") +
   geom_line(data = ireland %>%
-              filter(year > 2004), aes(year, medal_rank), size = 1, colour = "brown") +
+              filter(year > 2004), aes(year, medal_rank), linewidth = 1, colour = "brown") +
   geom_point(size = 3, colour = "white") +
   geom_point(data = ireland %>%
                filter(year == 2004), aes(2004, 60), size = 20, colour = "grey95") +
@@ -107,9 +111,11 @@ ireland %>%
 
 
 ```
+
+
 {{< /panel >}}
 {{< panel name = "Code" >}}
-```{r ref.label='Ireland', fig.show='hide'}
+```{r ref.label='Ireland'}
 
 
 ```
