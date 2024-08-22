@@ -1,7 +1,9 @@
 ---
 title: "A Misleading Chart: Ireland’s Olympic Success Story"
+author: "Ifeoma Egbogah"
 date: 2024-08-17
 layout: single-sidebar
+show_post_thumbnail: true
 draft: false
 categories:
 - visualization, blog
