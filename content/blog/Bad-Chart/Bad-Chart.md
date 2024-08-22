@@ -9,13 +9,16 @@ editor_options:
   chunk_output_type: console
 ---
 
+
+
+
 The other day, I saw this [Twitter](https://x.com/EemerEivers/status/1822239148519890981) post: “This is a masterclass (yet again) in [IrishTimes](https://x.com/IrishTimes) on how NOT to present information,” Dublin-based research consultant Dr Eemer Eivers wrote. “Quick glance & you’d be sure 🇮🇪 has tumbled DOWN the medal tables since 2000. FFS. This is criminal level breaking of the rules of how to share data.”
 
 When we look at data, especially in charts, we expect it to be clear and intuitive. But sometimes, even well-meaning visuals can mislead us. Take a look at this chart showing Ireland’s position in the Olympic Medals Table from Sydney 2000 to Paris 2024.
 
 <div class="figure" style="text-align: center">
-<img src="ireland.png" alt="Ireland's Olympic Story by Irish Times" width="342" />
-<p class="caption"><span id="fig:unnamed-chunk-1"></span>Figure 1: Ireland's Olympic Story by Irish Times</p>
+<img src="/blog/Bad-Chart/Bad-Chart_files/figure-html/unnamed-chunk-2-1.png" alt="Ireland's Olympic Story by Irish Times" width="462" />
+<p class="caption"><span id="fig:unnamed-chunk-2"></span>Figure 1: Ireland's Olympic Story by Irish Times</p>
 </div>
 
 
@@ -38,70 +41,12 @@ To make the chart more intuitive, the y-axis should either be inverted, so that 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Better Chart" >}}
 
+
 ```r
-olympic <- olympic %>% 
-  group_by(year, country_name) %>% 
-  rowwise() %>% 
-  mutate(medals = sum(c_across(gold:bronze)))
-
-ireland <- olympic %>% 
-  group_by(year) %>% 
-  arrange(desc(gold), desc(silver), desc(bronze)) %>%
-  mutate(medal_rank = min_rank(-gold * 1e6 - silver * 1e3 - bronze)) %>%
-  filter(country_name == "Ireland" & year >= 2000) %>% 
-  unite("host", host_city, year, sep = " ", remove = FALSE) 
-
-ire_2024 <- tibble(host = c("Athens 2004", "Paris 2024"),
-                   year = c(2004, 2024),
-                   host_country = c("Greece", "France"),
-                   host_city = c("Athens", "Paris"),
-                   country_name = c("Ireland","Ireland"),
-                   country_code = c("IRL", "IRL"),
-                   gold = c(0, 4),
-                   silver = c(0, 0),
-                   bronze = c(0, 3),
-                   medals = c(0, 7),
-                   medal_rank = c(NA, 19))
-
-ireland <- bind_rows(ireland, ire_2024)
-
-# Custom function to add ordinal suffix
-add_suffix <- function(x) {
-  if (is.na(x)) {
-    return(NA)
-  } else if (x %% 100 >= 11 && x %% 100 <= 13) {
-    return(paste0(x, "th"))
-  } else if (x %% 10 == 1) {
-    return(paste0(x, "st"))
-  } else if (x %% 10 == 2) {
-    return(paste0(x, "nd"))
-  } else if (x %% 10 == 3) {
-    return(paste0(x, "rd"))
-  } else {
-    return(paste0(x, "th"))
-  }
-}
-# Apply the function to label the points
-chart <- ireland %>%
-  ggplot(aes(year, medal_rank)) +
-  geom_point(size = 5.5, colour = "brown") +
-  geom_line(data = ireland %>%
-              filter(year > 2004), aes(year, medal_rank), linewidth = 1, colour = "brown") +
-  geom_point(size = 3, colour = "white") +
-  geom_point(data = ireland %>%
-               filter(year == 2004), aes(2004, 60), size = 20, colour = "grey95") +
-  geom_text(data = ireland %>%
-               filter(year == 2004), aes(2004, 60, label = "No\nMedal"), nudge_y = 1.2) +
-  geom_text(aes(label = sapply(medal_rank, add_suffix)), nudge_y = 4) +
-  scale_y_reverse(limits = c(70, 1), breaks = c(70, 60, 50, 40, 30, 20, 10, 1)) +
-  scale_x_continuous(breaks = c(2000, 2004, 2008, 2012, 2016, 2020, 2024), labels = c("Sydney\n2000", "Athens\n2004", "Beijing\n2008", "London\n2012", "Rio de Janeiro\n2016", "Tokyo\n2020", "Paris\n2024")) +
-  theme_light() +
-  labs(x = "Year",
-       y = "Medal Rank",
-       title = "Ireland's Olympic Success Story",
-       caption = "Source: Kaggle\n Viz: Ifeoma Egbogah") +
-  theme(plot.caption = element_text(colour = "grey65", face = "italic"))
+chart
 ```
+
+<img src="/blog/Bad-Chart/Bad-Chart_files/figure-html/unnamed-chunk-3-1.png" width="672" />
 
 
 {{< /panel >}}
@@ -150,6 +95,7 @@ add_suffix <- function(x) {
     return(paste0(x, "th"))
   }
 }
+
 # Apply the function to label the points
 chart <- ireland %>%
   ggplot(aes(year, medal_rank)) +
@@ -158,18 +104,19 @@ chart <- ireland %>%
               filter(year > 2004), aes(year, medal_rank), linewidth = 1, colour = "brown") +
   geom_point(size = 3, colour = "white") +
   geom_point(data = ireland %>%
-               filter(year == 2004), aes(2004, 60), size = 20, colour = "grey95") +
+               filter(year == 2004), aes(2004, 60), size = 20, colour = "white") +
   geom_text(data = ireland %>%
                filter(year == 2004), aes(2004, 60, label = "No\nMedal"), nudge_y = 1.2) +
   geom_text(aes(label = sapply(medal_rank, add_suffix)), nudge_y = 4) +
   scale_y_reverse(limits = c(70, 1), breaks = c(70, 60, 50, 40, 30, 20, 10, 1)) +
   scale_x_continuous(breaks = c(2000, 2004, 2008, 2012, 2016, 2020, 2024), labels = c("Sydney\n2000", "Athens\n2004", "Beijing\n2008", "London\n2012", "Rio de Janeiro\n2016", "Tokyo\n2020", "Paris\n2024")) +
-  theme_light() +
+  theme_solarized() +
   labs(x = "Year",
        y = "Medal Rank",
        title = "Ireland's Olympic Success Story",
-       caption = "Source: Kaggle\n Viz: Ifeoma Egbogah") +
-  theme(plot.caption = element_text(colour = "grey65", face = "italic"))
+       caption = "Source: Kaggle, Viz: Ifeoma Egbogah") +
+  theme(plot.caption = element_text(colour = "grey65", face = "italic"),
+        plot.title = element_text(hjust = 0.5, colour = "brown"))
 ```
 {{< /panel >}}
 {{< /panelset >}}

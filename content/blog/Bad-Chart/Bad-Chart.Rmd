@@ -9,13 +9,25 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r echo=FALSE, warning=FALSE, message=FALSE, include=FALSE}
+
+library(tidyverse)
+library(magick)
+library(ggthemes)
+
+olympic <- read_csv("summer_olympic_medals.csv") %>% 
+  janitor::clean_names() 
+
+```
+
+
 The other day, I saw this [Twitter](https://x.com/EemerEivers/status/1822239148519890981) post: “This is a masterclass (yet again) in [IrishTimes](https://x.com/IrishTimes) on how NOT to present information,” Dublin-based research consultant Dr Eemer Eivers wrote. “Quick glance & you’d be sure 🇮🇪 has tumbled DOWN the medal tables since 2000. FFS. This is criminal level breaking of the rules of how to share data.”
 
 When we look at data, especially in charts, we expect it to be clear and intuitive. But sometimes, even well-meaning visuals can mislead us. Take a look at this chart showing Ireland’s position in the Olympic Medals Table from Sydney 2000 to Paris 2024.
 
-```{r echo=FALSE, fig.align='center', fig.cap="Ireland's Olympic Story by Irish Times"}
+```{r echo=FALSE, fig.align='center', fig.cap="Ireland's Olympic Story by Irish Times", fig.width = 25, fig.height = 23.63}
 
-knitr::include_graphics("ireland.png", dpi = 260)
+image_read("ireland.png")
 
 ```
 
@@ -34,18 +46,8 @@ The y-axis of this chart is plotted in a way that makes a higher ranking (which 
 To make the chart more intuitive, the y-axis should either be inverted, so that the best positions are at the top, or we could explain that a downward trend in this context is actually a positive sign of improvement.
 
 
-```{r echo=FALSE, warning=FALSE, message=FALSE}
+```{r Ireland, warning=FALSE, fig.width = 25, fig.height = 23.63, include=FALSE}
 
-library(tidyverse)
-
-olympic <- read_csv("summer_olympic_medals.csv") %>% 
-  janitor::clean_names() 
-
-```
-
-{{< panelset class = "greetings" >}}
-{{< panel name = "Better Chart" >}}
-```{r Ireland}
 olympic <- olympic %>% 
   group_by(year, country_name) %>% 
   rowwise() %>% 
@@ -88,6 +90,7 @@ add_suffix <- function(x) {
     return(paste0(x, "th"))
   }
 }
+
 # Apply the function to label the points
 chart <- ireland %>%
   ggplot(aes(year, medal_rank)) +
@@ -96,20 +99,28 @@ chart <- ireland %>%
               filter(year > 2004), aes(year, medal_rank), linewidth = 1, colour = "brown") +
   geom_point(size = 3, colour = "white") +
   geom_point(data = ireland %>%
-               filter(year == 2004), aes(2004, 60), size = 20, colour = "grey95") +
+               filter(year == 2004), aes(2004, 60), size = 20, colour = "white") +
   geom_text(data = ireland %>%
                filter(year == 2004), aes(2004, 60, label = "No\nMedal"), nudge_y = 1.2) +
   geom_text(aes(label = sapply(medal_rank, add_suffix)), nudge_y = 4) +
   scale_y_reverse(limits = c(70, 1), breaks = c(70, 60, 50, 40, 30, 20, 10, 1)) +
   scale_x_continuous(breaks = c(2000, 2004, 2008, 2012, 2016, 2020, 2024), labels = c("Sydney\n2000", "Athens\n2004", "Beijing\n2008", "London\n2012", "Rio de Janeiro\n2016", "Tokyo\n2020", "Paris\n2024")) +
-  theme_light() +
+  theme_solarized() +
   labs(x = "Year",
        y = "Medal Rank",
        title = "Ireland's Olympic Success Story",
-       caption = "Source: Kaggle\n Viz: Ifeoma Egbogah") +
-  theme(plot.caption = element_text(colour = "grey65", face = "italic"))
+       caption = "Source: Kaggle, Viz: Ifeoma Egbogah") +
+  theme(plot.caption = element_text(colour = "grey65", face = "italic"),
+        plot.title = element_text(hjust = 0.5, colour = "brown"))
 
 
+```
+
+{{< panelset class = "greetings" >}}
+{{< panel name = "Better Chart" >}}
+
+```{r warning=FALSE}
+chart
 ```
 
 
