@@ -33,7 +33,7 @@ For stony limits cannot hold love out."\
 
 
 <div class="figure" style="text-align: center">
-<img src="/blog/Romeo-Romeo/romeo/romeo_files/figure-html/unnamed-chunk-2-1.png" alt="AI Generated Art" width="512" />
+<img src="/blog/Romeo-Romeo/romeo_files/figure-html/unnamed-chunk-2-1.png" alt="AI Generated Art" width="512" />
 <p class="caption"><span id="fig:unnamed-chunk-2"></span>Figure 1: AI Generated Art</p>
 </div>
 
@@ -69,7 +69,7 @@ The words **Thou, Thy,** and **Thee** dominate the dialogue in Romeo and Juliet.
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Top 25 Words" >}}
-<img src="/blog/Romeo-Romeo/romeo/romeo_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="/blog/Romeo-Romeo/romeo_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -79,10 +79,10 @@ top_word <- romeo_juliet_token %>%
   top_n(25) %>% 
   mutate(word = fct_reorder(str_to_title(word), n)) %>% 
   ggplot(aes(n, word)) +
-  geom_point_blur(aes(y = word, size = n, blur_size = n), 
+  geom_point_blur(aes(y = word, size = n, blur_size = n), colour = "#B32B9E",
                   blur_steps = 3, 
                   show.legend = FALSE) +
-  geom_segment(aes(x = n, xend = 0, y = word, yend = word), linewidth = 1) +
+  geom_segment(aes(x = n, xend = 0, y = word, yend = word), linewidth = 1, colour = "#B32B9E") +
   scale_blur_size_continuous(range = c(1, 5)) +
   scale_size(range = c(2, 5)) +
   theme(plot.background = element_rect(fill = "#EBD8EC"),
@@ -108,7 +108,7 @@ No surprises here—being the title characters, **Romeo** and **Juliet** have th
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Top 10 Characters" >}}
-<img src="/blog/Romeo-Romeo/romeo/romeo_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="/blog/Romeo-Romeo/romeo_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 
 {{< /panel >}}
 {{< panel name = "Code" >}}
@@ -123,10 +123,10 @@ character <- romeo_juliet_token %>%
   arrange(desc(n)) %>% 
   mutate(id = row_number()) %>% 
   ggplot(aes(n, character)) +
-  geom_point_blur(aes(y = character, size = n, blur_size = n), 
+  geom_point_blur(aes(y = character, size = n, blur_size = n), colour = "#B32B9E",
                   blur_steps = 3, 
                   show.legend = FALSE) +
-  geom_segment(aes(x = n, xend = 0, y = character, yend = character), linewidth = 1) +
+  geom_segment(aes(x = n, xend = 0, y = character, yend = character), linewidth = 1, colour = "#B32B9E") +
   scale_blur_size_continuous(range = c(1, 5)) +
   scale_size(range = c(2, 5)) +
   theme(plot.background = element_rect(fill = "#EBD8EC"),
@@ -156,7 +156,7 @@ Juliet’s most frequent words in the play are *Thou*, *Romeo*, and *Thee*, refl
 {{< panelset class = "greetings" >}}
 {{< panel name = "Romeo and Juliet" >}}
 
-<img src="/blog/Romeo-Romeo/romeo/romeo_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="/blog/Romeo-Romeo/romeo_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
 {{< /panel >}}
 {{< panel name = "Code" >}}
@@ -206,7 +206,7 @@ Words like **wall**, **heads**, **maids**, **thumb**, **bite**, **swords**, **st
 {{< panelset class = "greetings" >}}
 {{< panel name = "Begining and End Words" >}}
 
-<img src="/blog/Romeo-Romeo/romeo/romeo_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="/blog/Romeo-Romeo/romeo_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
 {{< /panel >}}
 {{< panel name = "Code" >}}
@@ -284,7 +284,7 @@ The chart highlights how Shakespeare masterfully shifts the play’s tone and fo
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Trend" >}}
-<img src="/blog/Romeo-Romeo/romeo/romeo_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="/blog/Romeo-Romeo/romeo_files/figure-html/unnamed-chunk-12-1.png" width="672" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -325,7 +325,7 @@ Each decile has some some words that peak within it.
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Peak" >}}
-<img src="/blog/Romeo-Romeo/romeo/romeo_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="/blog/Romeo-Romeo/romeo_files/figure-html/unnamed-chunk-14-1.png" width="672" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
@@ -381,7 +381,7 @@ In conclusion, this Bing sentiment analysis highlights the emotional journey in 
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Sentiment Analysis" >}}
-<img src="/blog/Romeo-Romeo/romeo/romeo_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="/blog/Romeo-Romeo/romeo_files/figure-html/unnamed-chunk-16-1.png" width="672" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
