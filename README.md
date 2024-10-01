@@ -223,7 +223,7 @@ In the front matter of a page, along with things you'd expect like title, subtit
 + `single-sidebar`. 
 
 ```yaml
-layout: single # single or single-sidebar
+layout: single-sidebar # single or single-sidebar
 ```
 
 Either of these layouts will work for any content section (blogs, projects, talks), and can even be mixed and matched within any content section. You can also add link buttons to the top of a single page in any content section (helpful for sharing external resources related to a page like a slide deck, YouTube video, GitHub repository, etc.):
