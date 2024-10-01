@@ -95,10 +95,10 @@ top_word <- romeo_juliet_token %>%
   top_n(25) %>% 
   mutate(word = fct_reorder(str_to_title(word), n)) %>% 
   ggplot(aes(n, word)) +
-  geom_point_blur(aes(y = word, size = n, blur_size = n), 
+  geom_point_blur(aes(y = word, size = n, blur_size = n), colour = "#B32B9E",
                   blur_steps = 3, 
                   show.legend = FALSE) +
-  geom_segment(aes(x = n, xend = 0, y = word, yend = word), linewidth = 1) +
+  geom_segment(aes(x = n, xend = 0, y = word, yend = word), linewidth = 1, colour = "#B32B9E") +
   scale_blur_size_continuous(range = c(1, 5)) +
   scale_size(range = c(2, 5)) +
   theme(plot.background = element_rect(fill = "#EBD8EC"),
@@ -143,10 +143,10 @@ character <- romeo_juliet_token %>%
   arrange(desc(n)) %>% 
   mutate(id = row_number()) %>% 
   ggplot(aes(n, character)) +
-  geom_point_blur(aes(y = character, size = n, blur_size = n), 
+  geom_point_blur(aes(y = character, size = n, blur_size = n), colour = "#B32B9E",
                   blur_steps = 3, 
                   show.legend = FALSE) +
-  geom_segment(aes(x = n, xend = 0, y = character, yend = character), linewidth = 1) +
+  geom_segment(aes(x = n, xend = 0, y = character, yend = character), linewidth = 1, colour = "#B32B9E") +
   scale_blur_size_continuous(range = c(1, 5)) +
   scale_size(range = c(2, 5)) +
   theme(plot.background = element_rect(fill = "#EBD8EC"),
