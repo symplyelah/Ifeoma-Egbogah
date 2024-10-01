@@ -381,7 +381,7 @@ In conclusion, this Bing sentiment analysis highlights the emotional journey in 
 
 {{< panelset class = "greetings" >}}
 {{< panel name = "Sentiment Analysis" >}}
-
+<img src="/blog/Romeo-Romeo/romeo_files/figure-html/unnamed-chunk-16-1.png" width="672" />
 {{< /panel >}}
 {{< panel name = "Code" >}}
 
