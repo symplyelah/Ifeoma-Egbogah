@@ -1,0 +1,97 @@
+---
+title: "The Lifespan and Legacy of Shem’s Descendant"
+author: "Ifeoma Egbogah"
+date: 2025-01-13
+layout: single-sidebar
+show_post_thumbnail: true
+draft: false
+categories:
+- visualization, blog, tidytuesday
+editor_options: 
+  chunk_output_type: console
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Genesis has always been one of my favorite books in the Bible! There’s something profoundly captivating about diving into its stories and wisdom. Over the years, I’ve enjoyed reading it from cover to cover, and I find the genealogical records particularly fascinating—even if I sometimes stumble over the names (a pronunciation guide would be a lifesaver!).
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, include=FALSE}
+
+library(tidyverse)
+theme_set(theme_light())
+
+gen <- read_csv("content/blog/Shem-genealogy/genesis_genealogy.csv") %>% 
+  janitor::clean_names()
+
+
+```
+
+### Genesis: A Journey Through the Genealogies
+
+Recently, while revisiting the 11th chapter, my curiosity was sparked once again, and I couldn’t help but dive deeper. It led me to ask some intriguing questions.
+
+I couldn’t resist the urge to explore further, so I gathered the data from the genealogical accounts and created a visualization to answer these questions. The results were both enlightening and humbling, reminding me of the depth and richness hidden in these ancient records.
+
+
+```{r, shem, warning=FALSE, fig.width = 25, fig.height = 23.63, include=FALSE}
+
+chart <- gen %>% 
+  mutate(shem_death = 600,
+    shem_age_after_first_birth = cumsum(age_at_first_child),
+         lived_after_first_birth = total_lifespan - age_at_first_child,
+         shem_age = lived_after_first_birth + shem_age_after_first_birth,
+         outlived_shem = ifelse(shem_age > shem_death, "Outlived Shem", "Died Before Shem"),
+        name = factor(name, levels = rev(unique(name)))) %>% 
+  ggplot() +
+   geom_segment(aes(x = shem_age_after_first_birth, xend = shem_age, y = name, yend = name, colour = outlived_shem), linewidth = 1, alpha = 0.6) +
+  geom_point(aes(shem_age_after_first_birth, name), colour = "#4CAF50", alpha = 0.8, size = 5) +
+  geom_point(aes(shem_age, name), colour = "#9C27B0", alpha = 0.8, size = 5) +
+ 
+  shadowtext::geom_shadowtext(aes(x = shem_age_after_first_birth,y = name, label = name), hjust = 1.5, nudge_x = -0.015, colour = "grey30", bg.color = "grey99", vjust = 0.45) +
+  scale_x_continuous(breaks = seq(0, 700, 100), limits = c(0, 700)) +
+  scale_colour_manual(values = c("#4CAF50", "#9C27B0"), guide = guide_legend(reverse = TRUE)) +
+  coord_cartesian(clip = "off") +
+   
+  labs(title = "The Lifespan and Legacy of Shem’s Descendants",
+       x = "Shem's Age",
+       y = "",
+       subtitle = str_wrap("Tracing the Generations from Shem to Abraham: Who Outlived Shem and When They Had Their First Children"),
+       caption = "Source: Genesis 11:10-32 9 (Holy Bible) · Graphic: Ifeoma Egbogah",
+       colour = "") +
+  theme_minimal() +
+  theme( legend.position = "top",
+    legend.text = element_text(size = 11),
+     axis.text.y = element_blank(),
+    plot.background = element_rect(fill = "grey99", color = NA),
+    axis.text = element_text(size = 10),
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(lineheight = 1, hjust = 0.5),
+    plot.caption = element_text(margin = margin(10, 0, 0, 0), face = "italic"))
+
+
+```
+
+{{< panelset class = "greetings" >}}
+{{< panel name = "Dumbbell Chart" >}}
+
+```{r warning=FALSE}
+chart
+
+```
+
+
+{{< /panel >}}
+{{< panel name = "Code" >}}
+```{r ref.label='shem'}
+
+
+```
+{{< /panel >}}
+{{< /panelset >}}
+
+
+### Exploring the Lifespans of Shem's Descendants
+This visualization explores the lifespan of each descendant, focusing on two key aspects: the age of Shem when each descendant had their first child and whether they outlived him.
