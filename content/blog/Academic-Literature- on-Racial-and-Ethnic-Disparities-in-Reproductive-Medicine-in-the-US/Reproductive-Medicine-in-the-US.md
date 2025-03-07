@@ -9,19 +9,9 @@ categories:
 - blog, tidytuesday, LDA, Reproductive, Health, Topic modelling
 editor_options: 
   chunk_output_type: console
-output:
-  html_document:
-    fig_width: 20
-    fig_height: 60
+output: html_document
 
 ---
-
-<style>
-.plot-container {
-  width: 100%;
-  height: auto;
-}
-</style>
 
 Over the past decade, researchers have been increasingly investigating racial and ethnic disparities in reproductive medicine, aiming to uncover patterns of inequality and inform policy changes. This week's [#TidyTuesday dataset](https://github.com/rfordatascience/tidytuesday) features a collection of studies from the **eight highest-impact peer-reviewed Ob/Gyn journals**, covering publications from **January 1, 2010, through June 30, 2023**. These studies were reviewed in a recent article, *Racial and Ethnic Disparities in Reproductive Medicine in the United States: A Narrative Review of Contemporary High-Quality Evidence*, published in the *American Journal of Obstetrics and Gynecology* in **January 2025**.
 
